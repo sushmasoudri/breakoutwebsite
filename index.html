@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Home · Breakout Marketing</title>
+    <meta name="description" content="Premium advisory in Real Estate Investments, Financial Services, and Business Setup in Dubai."/>
+    <meta name="keywords" content="Dubai, Real Estate Investment, Financial Services, Business Setup, Advisory"/>
+    <meta property="og:title" content="Home · Breakout Marketing"/>
+    <meta property="og:description" content="Premium advisory in Real Estate Investments, Financial Services, and Business Setup in Dubai."/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:image" content="https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=70"/>
+    
+    <link rel="preload" as="image" href="https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1800&q=70"
+          imagesrcset="https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=60 1200w, 
+                        https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1800&q=70 1800w"
+          imagesizes="100vw"/>
+    
+    <link rel="icon" href="/favicon.ico"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a class="nav__brand" href="index.html">Breakout Marketing</a>
+            <button class="nav__toggle" aria-label="Toggle menu"></button>
+            <ul class="nav__links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a class="button button--sm" href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="video-carousel">
+                <video class="hero__video active" autoplay muted playsinline>
+                    <source src="bg video/1.mp4" type="video/mp4">
+                </video>
+                <video class="hero__video" muted playsinline>
+                    <source src="bg video/2.mp4" type="video/mp4">
+                </video>
+                <video class="hero__video" muted playsinline>
+                    <source src="bg video/3.mp4" type="video/mp4">
+                </video>
+                <video class="hero__video" muted playsinline>
+                    <source src="bg video/4.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="hero__overlay"></div>
+            <div class="hero__content container reveal">
+                <span class="badge">Dubai · UAE</span>
+                <h1 id="heroTitle">Discover Smart Investment & Better Living</h1>
+                <p id="heroSubtitle">Discover luxury villas and apartments in Dubai with Breakout Marketing. Make smart investments with our expert guidance.</p>
+                <a class="button button--primary" href="contact.html" id="heroCta">View All Projects</a>
+            </div>
+        </section>
+
+     <section class="section container reveal">
+    <h2 class="section__title">Our Services</h2>
+    <div class="grid grid--3" id="servicesGrid">
+
+        <a class="portfolio-card" href="services.html#real-estate">
+            <div class="portfolio-card__image">
+                <img src="{{ url_for('static', filename='images/real-estate.jpeg') }}" alt="Real Estate Investments" loading="lazy">
+            </div>
+            <div class="portfolio-card__content">
+                <h3>Real Estate Investments</h3>
+                <p class="portfolio-card__desc">Unlock Dubai's Property Potential</p>
+            </div>
+        </a>
+
+        <a class="portfolio-card" href="services.html#financial">
+            <div class="portfolio-card__image">
+                <img src="{{ url_for('static', filename='images/financial.jpeg') }}" alt="Financial Services" loading="lazy">
+            </div>
+            <div class="portfolio-card__content">
+                <h3>Financial Services</h3>
+                <p class="portfolio-card__desc">Smart Money, Smarter Growth</p>
+            </div>
+        </a>
+
+        <a class="portfolio-card" href="services.html#setup">
+            <div class="portfolio-card__image">
+                <img src="{{ url_for('static', filename='images/business-setup.jpeg') }}" alt="Business Setup" loading="lazy">
+            </div>
+            <div class="portfolio-card__content">
+                <h3>Business Setup</h3>
+                <p class="portfolio-card__desc">Your Gateway to Global Business</p>
+            </div>
+        </a>
+
+    </div>
+</section>
+
+
+
+        <section class="section container reveal" id="testimonials">
+            <h2 class="section__title">What Our Clients Say</h2>
+            <div class="grid grid--2" id="testimonialsGrid">
+                <div class="card">
+                    <p>"Breakout Marketing made investing in Dubai simple and stress-free. I never imagined such high returns with such ease."</p>
+                    <cite>– Client from Bangalore</cite>
+                </div>
+                <div class="card">
+                    <p>"The business setup process was smooth and professional. I could focus on my business while they handled everything."</p>
+                    <cite>– Client from Dubai</cite>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Breakout Marketing. All rights reserved.</p>
+            <p><a href="mailto:contact@breakoutmarketing.com">contact@breakoutmarketing.com</a> · Dubai, UAE</p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js" defer></script>
+    <script>
+        async function loadHomeContent() {
+            try {
+                const res = await fetch('/api/content/home', { cache: 'force-cache' });
+                const data = await res.json();
+
+                document.getElementById('heroTitle').textContent = data.heroTitle || 'Discover Smart Investment & Better Living';
+                document.getElementById('heroSubtitle').textContent = data.heroSubtitle || 'Discover luxury villas and apartments in Dubai with Breakout Marketing. Make smart investments with our expert guidance.';
+                document.getElementById('heroCta').textContent = data.cta || 'View All Projects';
+
+                const servicesGrid = document.getElementById('servicesGrid');
+                if (data.services && data.services.length) {
+                    servicesGrid.innerHTML = data.services.map(s =>
+                        `<a class="card" href="services.html#${s.title.toLowerCase().replace(/\s+/g, '-')}">
+                            <div class="card__icon">${s.icon || '🏠'}</div>
+                            <h3>${s.title}</h3>
+                            <p>${s.subtitle || s.desc}</p>
+                        </a>`).join('');
+                }
+
+                if (data.whyChooseUs) {
+                    document.getElementById('whyChooseUs').style.display = 'block';
+                    document.getElementById('whyTitle').textContent = data.whyChooseUs.title;
+                    document.getElementById('whyPoints').innerHTML = data.whyChooseUs.points.map(p => `<li>${p}</li>`).join('');
+                }
+
+                if (data.testimonials && data.testimonials.length) {
+                    document.getElementById('testimonials').style.display = 'block';
+                    document.getElementById('testimonialsGrid').innerHTML = data.testimonials.map(t =>
+                        `<div class="card">
+                            <p>"${t.quote}"</p>
+                            <cite>– ${t.author}</cite>
+                        </div>`).join('');
+                }
+            } catch (e) {
+                console.error('Failed to load home content:', e);
+            }
+        }
+
+        setTimeout(loadHomeContent, 100);
+    </script>
+</body>
+</html>

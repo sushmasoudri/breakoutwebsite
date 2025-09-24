@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Contact · Breakout Marketing</title>
+    <meta name="description" content="Premium advisory in Real Estate Investments, Financial Services, and Business Setup in Dubai."/>
+    <meta name="keywords" content="Dubai, Real Estate Investment, Financial Services, Business Setup, Advisory"/>
+    <meta property="og:title" content="Contact · Breakout Marketing"/>
+    <meta property="og:description" content="Premium advisory in Real Estate Investments, Financial Services, and Business Setup in Dubai."/>
+    <meta property="og:type" content="website"/>
+
+    <link rel="icon" href="/favicon.ico"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a class="nav__brand" href="index.html">Breakout Marketing</a>
+            <button class="nav__toggle" aria-label="Toggle menu"></button>
+            <ul class="nav__links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a class="button button--sm" href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero hero--contact">
+            <div class="hero__overlay"></div>
+            <div class="hero__content container reveal">
+                <h1 id="headline">Ready to Build Your Future? Let's Talk.</h1>
+                <p class="hero__subtitle">
+                    Get in touch with our experts for personalized investment and business solutions
+                </p>
+            </div>
+        </section>
+
+        <section class="section container reveal">
+            <div class="grid grid--2 contact-grid">
+
+                <!-- Contact Info -->
+                <div class="contact-info">
+                    <h2 class="section__title">Get In Touch</h2>
+
+                  <div class="contact-item">
+                        <a href="https://maps.app.goo.gl/ocETM5pZ2U2V7VFc9" target="_blank" class="contact-item__icon-link">
+                            <div class="contact-item__icon">📍</div>
+                        </a>
+                        <div class="contact-item__content">
+                            <h3>Our Offices</h3>
+                            <p id="subtitle">Offices in India & Dubai</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-item__icon">📞</div>
+                        <div class="contact-item__content">
+                            <h3>Phone</h3>
+                            <p id="phone">📞 Phone: [Insert Number]</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-item__icon">📧</div>
+                        <div class="contact-item__content">
+                            <h3>Email</h3>
+                            <p id="email">📧 Email: [Insert Email]</p>
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-item__icon">⏰</div>
+                        <div class="contact-item__content">
+                            <h3>Business Hours</h3>
+                            <p>
+                                Monday - Friday: 9:00 AM - 6:00 PM<br>
+                                Saturday: 10:00 AM - 4:00 PM
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Form -->
+                <div class="contact-form-container">
+                    <div class="contact-form-wrapper">
+                        <h2 class="section__title">Send Us a Message</h2>
+                        <form class="form contact-form" id="lead-form" method="POST" action="https://formspree.io/f/xbldjylr">
+                            <div class="form__row">
+                                <label>
+                                    Full Name
+                                    <input required name="name" type="text" placeholder="Enter your full name"/>
+                                </label>
+                                <label>
+                                    Email Address
+                                    <input required name="email" type="email" placeholder="Enter your email"/>
+                                </label>
+                            </div>
+
+                            <label>
+                                Phone Number
+                                <input name="phone" type="tel" placeholder="Enter your phone number"/>
+                            </label>
+
+                            <label>
+                                Service of Interest
+                                <select name="service">
+                                    <option value="">Select a service</option>
+                                    <option>Real Estate Investments</option>
+                                    <option>Financial Services</option>
+                                    <option>Business Setup</option>
+                                    <option>General Inquiry</option>
+                                </select>
+                            </label>
+
+                            <label>
+                                Investment Budget
+                                <select name="budget">
+                                    <option value="">Select budget range</option>
+                                    <option>Under $100K</option>
+                                    <option>$100K - $500K</option>
+                                    <option>$500K - $1M</option>
+                                    <option>$1M - $5M</option>
+                                    <option>Above $5M</option>
+                                </select>
+                            </label>
+
+                            <label>
+                                Message
+                                <textarea required name="message" rows="5" placeholder="Tell us about your investment goals or business needs..."></textarea>
+                            </label>
+
+                            <button class="button button--primary button--full" type="submit" id="submitBtn">
+                                👉 Schedule a Free Consultation Today
+                            </button>
+                            <p class="form__note" id="privacyNote">
+                                We respect your privacy. Your data is kept confidential and will only be used to contact you about your inquiry.
+                            </p>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section class="section section--alt container reveal">
+            <h2 class="section__title">Why Choose Breakout Marketing?</h2>
+            <div class="grid grid--3">
+                <div class="card">
+                    <!-- <div class="card__icon">🎯</div> -->
+                    <h3>Expert Guidance</h3>
+                    <p>Years of experience in Dubai's real estate and business landscape</p>
+                </div>
+                <div class="card">
+                    <!-- <div class="card__icon">🔒</div> -->
+                    <h3>Secure & Compliant</h3>
+                    <p>All transactions follow UAE regulations and best practices</p>
+                </div>
+                <div class="card">
+                    <!-- <div class="card__icon">📈</div> -->
+                    <h3>Proven Results</h3>
+                    <p>Track record of successful investments and business setups</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Breakout Marketing. All rights reserved.</p>
+            <p>
+                <a href="mailto:contact@breakoutmarketing.com">contact@breakoutmarketing.com</a> · Dubai, UAE
+            </p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js" defer></script>
+    <script>
+        async function loadContactContent() {
+            try {
+                const res = await fetch('/api/content/contact', { cache: 'force-cache' });
+                const data = await res.json();
+
+                document.getElementById('headline').textContent = data.headline || 'Ready to Build Your Future? Let\'s Talk.';
+
+                if(data.subtitle){
+                    document.getElementById('subtitle').style.display = 'block';
+                    document.getElementById('subtitle').textContent = data.subtitle;
+                }
+
+                if(data.phone){
+                    document.getElementById('phone').style.display = 'block';
+                    document.getElementById('phone').textContent = data.phone;
+                }
+
+                if(data.email){
+                    document.getElementById('email').style.display = 'block';
+                    document.getElementById('email').textContent = data.email;
+                }
+
+                document.getElementById('submitBtn').textContent = data.cta || '👉 Schedule a Free Consultation Today';
+                document.getElementById('privacyNote').textContent = data.note || 'We respect your privacy. Your data is kept confidential.';
+            } catch(e) {
+                console.error('Failed to load contact content:', e);
+            }
+        }
+
+        setTimeout(loadContactContent, 100);
+    </script>
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Admin - Breakout Marketing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Inter', sans-serif; background: #f9fafc; color: #111827; line-height: 1.6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        h1 { color: #0f172a; margin-bottom: 30px; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 30px; }
+        .tab { padding: 10px 20px; background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .tab.active { background: #2563eb; color: #fff; }
+        .tab:hover { background: #f3f4f6; }
+        .tab.active:hover { background: #1d4ed8; }
+        .content { background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; font-weight: 500; color: #374151; }
+        input, textarea, select { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-family: inherit; }
+        textarea { min-height: 100px; resize: vertical; }
+        .array-item { background: #f9fafc; padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #e5e7eb; }
+        .array-item h4 { margin-bottom: 10px; color: #0f172a; }
+        .btn { background: #2563eb; color: #fff; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; }
+        .btn:hover { background: #1d4ed8; }
+        .btn-secondary { background: #6b7280; }
+        .btn-secondary:hover { background: #4b5563; }
+        .btn-success { background: #10b981; }
+        .btn-success:hover { background: #059669; }
+        .btn-danger { background: #ef4444; }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-sm { padding: 5px 10px; font-size: 14px; }
+        .hidden { display: none; }
+        .status { padding: 10px; border-radius: 6px; margin-bottom: 20px; }
+        .status.success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
+        .status.error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Content Management - Breakout Marketing</h1>
+        
+        <div class="tabs">
+            <div class="tab active" data-page="home">Home</div>
+            <div class="tab" data-page="about">About</div>
+            <div class="tab" data-page="services">Services</div>
+            <div class="tab" data-page="portfolio">Portfolio</div>
+            <div class="tab" data-page="contact">Contact</div>
+        </div>
+
+        <div id="status"></div>
+
+        <div class="content">
+            <form id="contentForm">
+                <div id="formContent"></div>
+                <button type="submit" class="btn">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentPage = 'home';
+        let currentData = {};
+
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentPage = tab.dataset.page;
+                loadPage(currentPage);
+            });
+        });
+
+        // Load page content
+        async function loadPage(page) {
+            try {
+                const response = await fetch(`/api/content/${page}`);
+                if (!response.ok) throw new Error('Failed to load');
+                currentData = await response.json();
+                renderForm();
+            } catch (error) {
+                showStatus('Error loading content: ' + error.message, 'error');
+            }
+        }
+
+        // Render form based on current page
+        function renderForm() {
+            const container = document.getElementById('formContent');
+            container.innerHTML = '';
+
+            if (currentPage === 'home') {
+                container.innerHTML = `
+                    <div class="form-group">
+                        <label>Hero Title</label>
+                        <input type="text" name="heroTitle" value="${currentData.heroTitle || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Hero Subtitle</label>
+                        <textarea name="heroSubtitle">${currentData.heroSubtitle || ''}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Call to Action</label>
+                        <input type="text" name="cta" value="${currentData.cta || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Services</label>
+                        <div id="servicesList"></div>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addService()">Add Service</button>
+                    </div>
+                `;
+                renderServices();
+            } else if (currentPage === 'about') {
+                container.innerHTML = `
+                    <div class="form-group">
+                        <label>Headline</label>
+                        <input type="text" name="headline" value="${currentData.headline || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Introduction</label>
+                        <textarea name="intro">${currentData.intro || ''}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Mission</label>
+                        <textarea name="mission">${currentData.mission || ''}</textarea>
+                    </div>
+                `;
+            } else if (currentPage === 'services') {
+                container.innerHTML = `
+                    <div class="form-group">
+                        <label>Headline</label>
+                        <input type="text" name="headline" value="${currentData.headline || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Services</label>
+                        <div id="servicesList"></div>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addService()">Add Service</button>
+                    </div>
+                `;
+                renderServices();
+            } else if (currentPage === 'portfolio') {
+                container.innerHTML = `
+                    <div class="form-group">
+                        <label>Headline</label>
+                        <input type="text" name="headline" value="${currentData.headline || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Portfolio Items</label>
+                        <div id="portfolioList"></div>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="addPortfolioItem()">Add Item</button>
+                    </div>
+                `;
+                renderPortfolio();
+            } else if (currentPage === 'contact') {
+                container.innerHTML = `
+                    <div class="form-group">
+                        <label>Headline</label>
+                        <input type="text" name="headline" value="${currentData.headline || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Subtitle</label>
+                        <input type="text" name="subtitle" value="${currentData.subtitle || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="text" name="phone" value="${currentData.phone || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="text" name="email" value="${currentData.email || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Call to Action</label>
+                        <input type="text" name="cta" value="${currentData.cta || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Privacy Note</label>
+                        <textarea name="note">${currentData.note || ''}</textarea>
+                    </div>
+                `;
+            }
+        }
+
+        // Render services for home and services pages
+        function renderServices() {
+            const container = document.getElementById('servicesList');
+            const services = currentData.services || [];
+            container.innerHTML = services.map((service, index) => `
+                <div class="array-item">
+                    <h4>Service ${index + 1}</h4>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" name="services[${index}].title" value="${service.title || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Subtitle</label>
+                        <input type="text" name="services[${index}].subtitle" value="${service.subtitle || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="services[${index}].desc">${service.desc || ''}</textarea>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removeService(${index})">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        // Render portfolio items
+        function renderPortfolio() {
+            const container = document.getElementById('portfolioList');
+            const items = currentData.items || [];
+            container.innerHTML = items.map((item, index) => `
+                <div class="array-item">
+                    <h4>Item ${index + 1}</h4>
+                    <div class="form-group">
+                        <label>Title</label>
+                        <input type="text" name="items[${index}].title" value="${item.title || ''}">
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea name="items[${index}].desc">${item.desc || ''}</textarea>
+                    </div>
+                    <button type="button" class="btn btn-danger btn-sm" onclick="removePortfolioItem(${index})">Remove</button>
+                </div>
+            `).join('');
+        }
+
+        // Add/remove functions
+        function addService() {
+            if (!currentData.services) currentData.services = [];
+            currentData.services.push({ title: '', subtitle: '', desc: '' });
+            renderServices();
+        }
+
+        function removeService(index) {
+            currentData.services.splice(index, 1);
+            renderServices();
+        }
+
+        function addPortfolioItem() {
+            if (!currentData.items) currentData.items = [];
+            currentData.items.push({ title: '', desc: '' });
+            renderPortfolio();
+        }
+
+        function removePortfolioItem(index) {
+            currentData.items.splice(index, 1);
+            renderPortfolio();
+        }
+
+        // Form submission
+        document.getElementById('contentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = {};
+            
+            for (let [key, value] of formData.entries()) {
+                if (key.includes('[')) {
+                    // Handle array fields
+                    const [parent, child] = key.split('[');
+                    const index = parseInt(child.split(']')[0]);
+                    const field = child.split(']')[1].substring(1);
+                    
+                    if (!data[parent]) data[parent] = [];
+                    if (!data[parent][index]) data[parent][index] = {};
+                    data[parent][index][field] = value;
+                } else {
+                    data[key] = value;
+                }
+            }
+
+            try {
+                const response = await fetch(`/api/content/${currentPage}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                
+                if (!response.ok) throw new Error('Failed to save');
+                showStatus('Content saved successfully!', 'success');
+            } catch (error) {
+                showStatus('Error saving content: ' + error.message, 'error');
+            }
+        });
+
+        function showStatus(message, type) {
+            const status = document.getElementById('status');
+            status.innerHTML = `<div class="status ${type}">${message}</div>`;
+            setTimeout(() => status.innerHTML = '', 3000);
+        }
+
+        // Load initial page
+        loadPage('home');
+    </script>
+</body>
+</html>
