@@ -10,6 +10,7 @@
     <meta property="og:description" content="Premium advisory in Real Estate Investments, Financial Services, and Business Setup in Dubai."/>
     <meta property="og:type" content="website"/>
     <meta property="og:image" content="https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=70"/>
+    <meta property="og:url" content="https://yourdomain.com/page.html">
     
     <link rel="preload" as="image" href="https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1800&q=70"
           imagesrcset="https://images.unsplash.com/photo-1523731407965-2430cd12f5e4?auto=format&fit=crop&w=1200&q=60 1200w, 
@@ -63,57 +64,25 @@
             </div>
         </section>
 
-     <section class="section container reveal">
-    <h2 class="section__title">Our Services</h2>
-    <div class="grid grid--3" id="servicesGrid">
-
-        <a class="portfolio-card" href="services.html#real-estate">
-            <div class="portfolio-card__image">
-                <img src="{{ url_for('static', filename='images/real-estate.jpeg') }}" alt="Real Estate Investments" loading="lazy">
+        <section class="section container reveal">
+            <h2 class="section__title">Our Services</h2>
+            <div class="grid grid--3" id="servicesGrid">
+                <!-- Services will be loaded dynamically -->
             </div>
-            <div class="portfolio-card__content">
-                <h3>Real Estate Investments</h3>
-                <p class="portfolio-card__desc">Unlock Dubai's Property Potential</p>
-            </div>
-        </a>
-
-        <a class="portfolio-card" href="services.html#financial">
-            <div class="portfolio-card__image">
-                <img src="{{ url_for('static', filename='images/financial.jpeg') }}" alt="Financial Services" loading="lazy">
-            </div>
-            <div class="portfolio-card__content">
-                <h3>Financial Services</h3>
-                <p class="portfolio-card__desc">Smart Money, Smarter Growth</p>
-            </div>
-        </a>
-
-        <a class="portfolio-card" href="services.html#setup">
-            <div class="portfolio-card__image">
-                <img src="{{ url_for('static', filename='images/business-setup.jpeg') }}" alt="Business Setup" loading="lazy">
-            </div>
-            <div class="portfolio-card__content">
-                <h3>Business Setup</h3>
-                <p class="portfolio-card__desc">Your Gateway to Global Business</p>
-            </div>
-        </a>
-
-    </div>
-</section>
-
-
+        </section>
 
         <section class="section container reveal" id="testimonials">
             <h2 class="section__title">What Our Clients Say</h2>
             <div class="grid grid--2" id="testimonialsGrid">
-                <div class="card">
-                    <p>"Breakout Marketing made investing in Dubai simple and stress-free. I never imagined such high returns with such ease."</p>
-                    <cite>– Client from Bangalore</cite>
-                </div>
-                <div class="card">
-                    <p>"The business setup process was smooth and professional. I could focus on my business while they handled everything."</p>
-                    <cite>– Client from Dubai</cite>
-                </div>
+                <!-- Testimonials will be loaded dynamically -->
             </div>
+        </section>
+
+        <section class="section section--alt container reveal" id="whyChooseUs" style="display: none;">
+            <h2 class="section__title" id="whyTitle">Why Choose Breakout Marketing?</h2>
+            <ul id="whyPoints">
+                <!-- Why points will be loaded dynamically -->
+            </ul>
         </section>
     </main>
 
@@ -128,44 +97,119 @@
     <script>
         async function loadHomeContent() {
             try {
-                const res = await fetch('/api/content/home', { cache: 'force-cache' });
+                const res = await fetch('/api/content/home');
                 const data = await res.json();
 
+                // Update hero section
                 document.getElementById('heroTitle').textContent = data.heroTitle || 'Discover Smart Investment & Better Living';
                 document.getElementById('heroSubtitle').textContent = data.heroSubtitle || 'Discover luxury villas and apartments in Dubai with Breakout Marketing. Make smart investments with our expert guidance.';
                 document.getElementById('heroCta').textContent = data.cta || 'View All Projects';
 
+                // Update services section
                 const servicesGrid = document.getElementById('servicesGrid');
                 if (data.services && data.services.length) {
-                    servicesGrid.innerHTML = data.services.map(s =>
-                        `<a class="card" href="services.html#${s.title.toLowerCase().replace(/\s+/g, '-')}">
-                            <div class="card__icon">${s.icon || '🏠'}</div>
-                            <h3>${s.title}</h3>
-                            <p>${s.subtitle || s.desc}</p>
-                        </a>`).join('');
+                    servicesGrid.innerHTML = data.services.map(service => `
+                        <a class="card" href="services.html#${service.title.toLowerCase().replace(/\s+/g, '-')}">
+                            <div class="card__icon">${service.icon || ''}</div>
+                            <h3>${service.title}</h3>
+                            <p>${service.subtitle}</p>
+                        </a>
+                    `).join('');
+                } else {
+                    // Default services
+                    servicesGrid.innerHTML = `
+                        <a class="card" href="services.html#real-estate">
+                            <div class="card__icon"></div>
+                            <h3>Real Estate Investments</h3>
+                            <p>Unlock Dubai's Property Potential</p>
+                        </a>
+                        <a class="card" href="services.html#financial">
+                            <div class="card__icon"></div>
+                            <h3>Financial Services</h3>
+                            <p>Smart Money, Smarter Growth</p>
+                        </a>
+                        <a class="card" href="services.html#setup">
+                            <div class="card__icon"></div>
+                            <h3>Business Setup</h3>
+                            <p>Your Gateway to Global Business</p>
+                        </a>
+                    `;
                 }
 
+                // Update testimonials section
+                const testimonialsGrid = document.getElementById('testimonialsGrid');
+                if (data.testimonials && data.testimonials.length) {
+                    testimonialsGrid.innerHTML = data.testimonials.map(testimonial => `
+                        <div class="card">
+                            <p>"${testimonial.quote}"</p>
+                            <cite>– ${testimonial.author}</cite>
+                        </div>
+                    `).join('');
+                } else {
+                    // Default testimonials
+                    testimonialsGrid.innerHTML = `
+                        <div class="card">
+                            <p>"Breakout Marketing made investing in Dubai simple and stress-free. I never imagined such high returns with such ease."</p>
+                            <cite>– Client from Bangalore</cite>
+                        </div>
+                        <div class="card">
+                            <p>"The business setup process was smooth and professional. I could focus on my business while they handled everything."</p>
+                            <cite>– Client from Dubai</cite>
+                        </div>
+                    `;
+                }
+
+                // Update why choose us section
                 if (data.whyChooseUs) {
                     document.getElementById('whyChooseUs').style.display = 'block';
-                    document.getElementById('whyTitle').textContent = data.whyChooseUs.title;
-                    document.getElementById('whyPoints').innerHTML = data.whyChooseUs.points.map(p => `<li>${p}</li>`).join('');
+                    document.getElementById('whyTitle').textContent = data.whyChooseUs.title || 'Why Choose Breakout Marketing?';
+                    if (data.whyChooseUs.points && data.whyChooseUs.points.length) {
+                        document.getElementById('whyPoints').innerHTML = data.whyChooseUs.points.map(point => `<li>${point}</li>`).join('');
+                    }
                 }
 
-                if (data.testimonials && data.testimonials.length) {
-                    document.getElementById('testimonials').style.display = 'block';
-                    document.getElementById('testimonialsGrid').innerHTML = data.testimonials.map(t =>
-                        `<div class="card">
-                            <p>"${t.quote}"</p>
-                            <cite>– ${t.author}</cite>
-                        </div>`).join('');
-                }
             } catch (e) {
                 console.error('Failed to load home content:', e);
+                // Load default content if API fails
+                loadDefaultHomeContent();
             }
         }
 
-        setTimeout(loadHomeContent, 100);
+        function loadDefaultHomeContent() {
+            // Default services
+            document.getElementById('servicesGrid').innerHTML = `
+                <a class="card" href="services.html#real-estate">
+                    <div class="card__icon"></div>
+                    <h3>Real Estate Investments</h3>
+                    <p>Unlock Dubai's Property Potential</p>
+                </a>
+                <a class="card" href="services.html#financial">
+                    <div class="card__icon"></div>
+                    <h3>Financial Services</h3>
+                    <p>Smart Money, Smarter Growth</p>
+                </a>
+                <a class="card" href="services.html#setup">
+                    <div class="card__icon"></div>
+                    <h3>Business Setup</h3>
+                    <p>Your Gateway to Global Business</p>
+                </a>
+            `;
+
+            // Default testimonials
+            document.getElementById('testimonialsGrid').innerHTML = `
+                <div class="card">
+                    <p>"Breakout Marketing made investing in Dubai simple and stress-free. I never imagined such high returns with such ease."</p>
+                    <cite>– Client from Bangalore</cite>
+                </div>
+                <div class="card">
+                    <p>"The business setup process was smooth and professional. I could focus on my business while they handled everything."</p>
+                    <cite>– Client from Dubai</cite>
+                </div>
+            `;
+        }
+
+        // Load content when page is ready
+        document.addEventListener('DOMContentLoaded', loadHomeContent);
     </script>
 </body>
 </html>
-

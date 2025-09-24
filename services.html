@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Services · Breakout Marketing</title>
+    <meta name="description" content="Premium advisory in Real Estate Investments, Financial Services, and Business Setup in Dubai."/>
+    <meta name="keywords" content="Dubai, Real Estate Investment, Financial Services, Business Setup, Advisory"/>
+    <meta property="og:title" content="Services · Breakout Marketing"/>
+    <meta property="og:description" content="Premium advisory in Real Estate Investments, Financial Services, and Business Setup in Dubai."/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://yourdomain.com/page.html">
+
+    <link rel="icon" href="/favicon.ico"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/styles.css"/>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="nav container">
+            <a class="nav__brand" href="index.html">Breakout Marketing</a>
+            <button class="nav__toggle" aria-label="Toggle menu"></button>
+            <ul class="nav__links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="services.html">Services</a></li>
+                <li><a href="portfolio.html">Portfolio</a></li>
+                <li><a class="button button--sm" href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero hero--services">
+            <div class="hero__overlay"></div>
+            <div class="hero__content container reveal">
+                <h1 id="headline">Our Premium Services</h1>
+                <p class="hero__subtitle" id="subtitle">
+                    Comprehensive solutions for your investment and business needs in Dubai
+                </p>
+            </div>
+        </section>
+
+        <section class="section container reveal">
+            <h2 class="section__title">Our Services</h2>
+            <div id="servicesContent">
+                <!-- Services will be loaded dynamically -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Breakout Marketing. All rights reserved.</p>
+            <p><a href="mailto:contact@breakoutmarketing.com">contact@breakoutmarketing.com</a> · Dubai, UAE</p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js" defer></script>
+    <script>
+        async function loadServicesContent() {
+            try {
+                const res = await fetch('/api/content/services');
+                const data = await res.json();
+
+                // Update headline and subtitle
+                document.getElementById('headline').textContent = data.headline || 'Our Premium Services';
+                document.getElementById('subtitle').textContent = data.subtitle || 'Comprehensive solutions for your investment and business needs in Dubai';
+
+                // Update services content
+                const content = document.getElementById('servicesContent');
+                if (data.services && data.services.length) {
+                    content.innerHTML = data.services.map((service, index) => {
+                        const serviceId = service.title.toLowerCase().replace(/\s+/g, '-');
+                        const features = Array.isArray(service.features) ? service.features : 
+                                       (typeof service.features === 'string' ? service.features.split(',') : []);
+                        
+                        return `
+                            <div class="service-card" id="${serviceId}">
+                                <div class="service-card__image">
+                                    <img src="${service.image || `images/service-${index + 1}.jpeg`}" alt="${service.title}" onerror="this.src='https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=400&q=80'">
+                                </div>
+                                <div class="service-card__content">
+                                    <h2>${service.title}</h2>
+                                    <h3>${service.subtitle || ''}</h3>
+                                    <p>${service.description || ''}</p>
+                                    ${features.length > 0 ? `
+                                        <ul class="service-features">
+                                            ${features.map(feature => `<li>${feature.trim()}</li>`).join('')}
+                                        </ul>
+                                    ` : ''}
+                                    <a href="contact.html" class="button button--outline">Get Started</a>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    // Default services content
+                    content.innerHTML = `
+                        <div class="service-card" id="real-estate">
+                            <div class="service-card__image">
+                                <img src="images/real-estate.jpeg" alt="Real Estate Investments" onerror="this.src='https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=400&q=80'">
+                            </div>
+                            <div class="service-card__content">
+                                <h2>Real Estate Investments</h2>
+                                <h3>Unlock Dubai's Property Potential</h3>
+                                <p>Invest in high-demand real estate projects backed by top developers in the UAE. Enjoy high ROI, flexible payment plans, and secure transactions designed for both seasoned investors and first-time buyers.</p>
+                                <ul class="service-features">
+                                    <li>Acquisitions & disposals</li>
+                                    <li>Portfolio strategy</li>
+                                    <li>Asset & property management</li>
+                                </ul>
+                                <a href="contact.html" class="button button--outline">Get Started</a>
+                            </div>
+                        </div>
+
+                        <div class="service-card" id="financial">
+                            <div class="service-card__image">
+                                <img src="images/financial.jpeg" alt="Financial Services" onerror="this.src='https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=400&q=80'">
+                            </div>
+                            <div class="service-card__content">
+                                <h2>Financial Services</h2>
+                                <h3>Smart Money, Smarter Growth</h3>
+                                <p>From commodities like gold and crude oil to personalized financial planning, our team ensures secure, profitable, and compliant financial solutions for individuals and corporations.</p>
+                                <ul class="service-features">
+                                    <li>Wealth planning</li>
+                                    <li>Corporate finance</li>
+                                    <li>Risk management</li>
+                                </ul>
+                                <a href="contact.html" class="button button--outline">Learn More</a>
+                            </div>
+                        </div>
+
+                        <div class="service-card" id="setup">
+                            <div class="service-card__image">
+                                <img src="images/business-setup.jpeg" alt="Business Setup in Dubai" onerror="this.src='https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=400&q=80'">
+                            </div>
+                            <div class="service-card__content">
+                                <h2>Business Setup in Dubai</h2>
+                                <h3>Your Gateway to Global Business</h3>
+                                <p>We simplify company formation, licensing, and compliance, so you can start and scale your business in one of the world's fastest-growing markets. Whether mainland or freezone, we provide end-to-end guidance tailored to your needs.</p>
+                                <ul class="service-features">
+                                    <li>Company formation</li>
+                                    <li>Licensing & visas</li>
+                                    <li>Ongoing compliance</li>
+                                </ul>
+                                <a href="contact.html" class="button button--outline">Start Now</a>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                console.error('Failed to load services content:', e);
+                loadDefaultServicesContent();
+            }
+        }
+
+        function loadDefaultServicesContent() {
+            document.getElementById('servicesContent').innerHTML = `
+                <div class="service-card" id="real-estate">
+                    <div class="service-card__image">
+                        <img src="images/real-estate.jpeg" alt="Real Estate Investments" onerror="this.src='https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=400&q=80'">
+                    </div>
+                    <div class="service-card__content">
+                        <h2>Real Estate Investments</h2>
+                        <h3>Unlock Dubai's Property Potential</h3>
+                        <p>Invest in high-demand real estate projects backed by top developers in the UAE. Enjoy high ROI, flexible payment plans, and secure transactions designed for both seasoned investors and first-time buyers.</p>
+                        <ul class="service-features">
+                            <li>Acquisitions & disposals</li>
+                            <li>Portfolio strategy</li>
+                            <li>Asset & property management</li>
+                        </ul>
+                        <a href="contact.html" class="button button--outline">Get Started</a>
+                    </div>
+                </div>
+
+                <div class="service-card" id="financial">
+                    <div class="service-card__image">
+                        <img src="images/financial.jpeg" alt="Financial Services" onerror="this.src='https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=400&q=80'">
+                    </div>
+                    <div class="service-card__content">
+                        <h2>Financial Services</h2>
+                        <h3>Smart Money, Smarter Growth</h3>
+                        <p>From commodities like gold and crude oil to personalized financial planning, our team ensures secure, profitable, and compliant financial solutions for individuals and corporations.</p>
+                        <ul class="service-features">
+                            <li>Wealth planning</li>
+                            <li>Corporate finance</li>
+                            <li>Risk management</li>
+                        </ul>
+                        <a href="contact.html" class="button button--outline">Learn More</a>
+                    </div>
+                </div>
+
+                <div class="service-card" id="setup">
+                    <div class="service-card__image">
+                        <img src="images/business-setup.jpeg" alt="Business Setup in Dubai" onerror="this.src='https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=400&q=80'">
+                    </div>
+                    <div class="service-card__content">
+                        <h2>Business Setup in Dubai</h2>
+                        <h3>Your Gateway to Global Business</h3>
+                        <p>We simplify company formation, licensing, and compliance, so you can start and scale your business in one of the world's fastest-growing markets. Whether mainland or freezone, we provide end-to-end guidance tailored to your needs.</p>
+                        <ul class="service-features">
+                            <li>Company formation</li>
+                            <li>Licensing & visas</li>
+                            <li>Ongoing compliance</li>
+                        </ul>
+                        <a href="contact.html" class="button button--outline">Start Now</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        document.addEventListener('DOMContentLoaded', loadServicesContent);
+    </script>
+</body>
+</html>

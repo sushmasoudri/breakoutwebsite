@@ -9,12 +9,13 @@
     <meta property="og:title" content="Portfolio · Breakout Marketing"/>
     <meta property="og:description" content="Premium advisory in Real Estate Investments, Financial Services, and Business Setup in Dubai."/>
     <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://yourdomain.com/page.html">
 
     <link rel="icon" href="/favicon.ico"/>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="/css/styles.css"/>
+    <link rel="stylesheet" href="css/styles.css"/>
 </head>
 
 <body>
@@ -37,14 +38,162 @@
             <div class="hero__overlay"></div>
             <div class="hero__content container reveal">
                 <h1 id="headline">Our Success Stories</h1>
-                <p class="hero__subtitle">Real results from our investment and business setup services</p>
+                <p class="hero__subtitle" id="subtitle">Real results from our investment and business setup services</p>
             </div>
         </section>
 
         <section class="section container reveal">
             <h2 class="section__title">Featured Case Studies</h2>
             <div class="grid grid--3" id="portfolioGrid">
+                <!-- Portfolio items will be loaded dynamically -->
+            </div>
+        </section>
 
+        <section class="section section--alt container reveal">
+            <h2 class="section__title">Client Testimonials</h2>
+            <div class="grid grid--2" id="testimonialsGrid">
+                <!-- Testimonials will be loaded dynamically -->
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 Breakout Marketing. All rights reserved.</p>
+            <p>
+                <a href="mailto:contact@breakoutmarketing.com">contact@breakoutmarketing.com</a> · Dubai, UAE
+            </p>
+        </div>
+    </footer>
+
+    <script src="/js/main.js" defer></script>
+    <script>
+        async function loadPortfolioContent() {
+            try {
+                const res = await fetch('/api/content/portfolio');
+                const data = await res.json();
+
+                // Update headline and subtitle
+                document.getElementById('headline').textContent = data.headline || 'Our Success Stories';
+                document.getElementById('subtitle').textContent = data.subtitle || 'Real results from our investment and business setup services';
+
+                // Update portfolio items
+                const portfolioGrid = document.getElementById('portfolioGrid');
+                if (data.items && data.items.length) {
+                    portfolioGrid.innerHTML = data.items.map((item, index) => {
+                        const stats = Array.isArray(item.stats) ? item.stats : 
+                                    (typeof item.stats === 'string' ? item.stats.split(',') : []);
+                        
+                        return `
+                            <div class="portfolio-card">
+                                <div class="portfolio-card__image">
+                                    <img src="${item.image || `https://images.unsplash.com/photo-${1545324418 + index}?auto=format&fit=crop&w=400&q=80`}" alt="${item.title}" loading="lazy">
+                                </div>
+                                <div class="portfolio-card__content">
+                                    <h3>${item.title}</h3>
+                                    <p class="portfolio-card__desc">${item.description}</p>
+                                    <div class="portfolio-card__stats">
+                                        ${stats.map(stat => `<span class="stat">${stat.trim()}</span>`).join('')}
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                } else {
+                    // Default portfolio items
+                    portfolioGrid.innerHTML = `
+                        <div class="portfolio-card">
+                            <div class="portfolio-card__image">
+                                <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=400&q=80" alt="Luxury Residence" loading="lazy">
+                            </div>
+                            <div class="portfolio-card__content">
+                                <h3>Luxury Residence Acquisition</h3>
+                                <p class="portfolio-card__desc">End-to-end acquisition of premium Dubai property with 18% IRR achieved within 24 months.</p>
+                                <div class="portfolio-card__stats">
+                                    <span class="stat">18% IRR</span>
+                                    <span class="stat">24 months</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="portfolio-card">
+                            <div class="portfolio-card__image">
+                                <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&w=400&q=80" alt="Business Setup" loading="lazy">
+                            </div>
+                            <div class="portfolio-card__content">
+                                <h3>SME Capital Raise</h3>
+                                <p class="portfolio-card__desc">Successfully raised $4.2M growth financing for expanding technology company in Dubai.</p>
+                                <div class="portfolio-card__stats">
+                                    <span class="stat">$4.2M</span>
+                                    <span class="stat">Growth Capital</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="portfolio-card">
+                            <div class="portfolio-card__image">
+                                <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=400&q=80" alt="Free Zone" loading="lazy">
+                            </div>
+                            <div class="portfolio-card__content">
+                                <h3>Free Zone Setup</h3>
+                                <p class="portfolio-card__desc">Complete business incorporation in Dubai Free Zone with all licenses secured in just 10 days.</p>
+                                <div class="portfolio-card__stats">
+                                    <span class="stat">10 days</span>
+                                    <span class="stat">Complete Setup</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                // Update testimonials
+                const testimonialsGrid = document.getElementById('testimonialsGrid');
+                if (data.testimonials && data.testimonials.length) {
+                    testimonialsGrid.innerHTML = data.testimonials.map(testimonial => `
+                        <div class="testimonial-card">
+                            <div class="testimonial-card__quote">
+                                "${testimonial.quote}"
+                            </div>
+                            <div class="testimonial-card__author">
+                                <strong>${testimonial.author}</strong>
+                                <span>${testimonial.position}</span>
+                            </div>
+                        </div>
+                    `).join('');
+                } else {
+                    // Default testimonials
+                    testimonialsGrid.innerHTML = `
+                        <div class="testimonial-card">
+                            <div class="testimonial-card__quote">
+                                "Breakout Marketing made investing in Dubai simple and stress-free. I never imagined such high returns with such ease."
+                            </div>
+                            <div class="testimonial-card__author">
+                                <strong>Rajesh Kumar</strong>
+                                <span>Real Estate Investor, Bangalore</span>
+                            </div>
+                        </div>
+
+                        <div class="testimonial-card">
+                            <div class="testimonial-card__quote">
+                                "The business setup process was smooth and professional. I could focus on my business while they handled everything."
+                            </div>
+                            <div class="testimonial-card__author">
+                                <strong>Sarah Ahmed</strong>
+                                <span>Tech Entrepreneur, Dubai</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+            } catch (e) {
+                console.error('Failed to load portfolio content:', e);
+                loadDefaultPortfolioContent();
+            }
+        }
+
+        function loadDefaultPortfolioContent() {
+            // Default portfolio items
+            document.getElementById('portfolioGrid').innerHTML = `
                 <div class="portfolio-card">
                     <div class="portfolio-card__image">
                         <img src="https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=400&q=80" alt="Luxury Residence" loading="lazy">
@@ -86,14 +235,10 @@
                         </div>
                     </div>
                 </div>
+            `;
 
-            </div>
-        </section>
-
-        <section class="section section--alt container reveal">
-            <h2 class="section__title">Client Testimonials</h2>
-            <div class="grid grid--2" id="testimonialsGrid">
-
+            // Default testimonials
+            document.getElementById('testimonialsGrid').innerHTML = `
                 <div class="testimonial-card">
                     <div class="testimonial-card__quote">
                         "Breakout Marketing made investing in Dubai simple and stress-free. I never imagined such high returns with such ease."
@@ -113,44 +258,10 @@
                         <span>Tech Entrepreneur, Dubai</span>
                     </div>
                 </div>
-
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <div class="container">
-            <p>© 2025 Breakout Marketing. All rights reserved.</p>
-            <p>
-                <a href="mailto:contact@breakoutmarketing.com">contact@breakoutmarketing.com</a> · Dubai, UAE
-            </p>
-        </div>
-    </footer>
-
-    <script src="/js/main.js" defer></script>
-    <script>
-        async function loadPortfolioContent() {
-            try {
-                const res = await fetch('/api/content/portfolio', { cache: 'force-cache' });
-                const data = await res.json();
-
-                document.getElementById('headline').textContent = data.headline || 'Portfolio & Case Studies';
-
-                const grid = document.getElementById('portfolioGrid');
-                if(data.items && data.items.length){
-                    grid.innerHTML = data.items.map(item =>
-                        `<div class="card">
-                            <h3>${item.title}</h3>
-                            <p>${item.desc}</p>
-                        </div>`).join('');
-                }
-
-            } catch(e) {
-                console.error('Failed to load portfolio content:', e);
-            }
+            `;
         }
 
-        setTimeout(loadPortfolioContent, 100);
+        document.addEventListener('DOMContentLoaded', loadPortfolioContent);
     </script>
 </body>
 </html>

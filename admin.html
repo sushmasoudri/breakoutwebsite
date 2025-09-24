@@ -3,27 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Content Admin - Breakout Marketing</title>
+    <title>Advanced Admin Panel - Breakout Marketing</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background: #f9fafc; color: #111827; line-height: 1.6; }
-        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-        h1 { color: #0f172a; margin-bottom: 30px; }
-        .tabs { display: flex; gap: 10px; margin-bottom: 30px; }
-        .tab { padding: 10px 20px; background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer; transition: all 0.2s; }
-        .tab.active { background: #2563eb; color: #fff; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+        h1 { color: #0f172a; margin-bottom: 30px; display: flex; align-items: center; gap: 10px; }
+        h1 i { color: #dc2626; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 30px; flex-wrap: wrap; }
+        .tab { padding: 12px 24px; background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; gap: 8px; }
+        .tab.active { background: #dc2626; color: #fff; }
         .tab:hover { background: #f3f4f6; }
-        .tab.active:hover { background: #1d4ed8; }
+        .tab.active:hover { background: #b91c1c; }
         .content { background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); }
         .form-group { margin-bottom: 20px; }
         label { display: block; margin-bottom: 5px; font-weight: 500; color: #374151; }
         input, textarea, select { width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px; font-family: inherit; }
         textarea { min-height: 100px; resize: vertical; }
-        .array-item { background: #f9fafc; padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #e5e7eb; }
-        .array-item h4 { margin-bottom: 10px; color: #0f172a; }
-        .btn { background: #2563eb; color: #fff; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; }
-        .btn:hover { background: #1d4ed8; }
+        .array-item { background: #f9fafc; padding: 15px; border-radius: 8px; margin-bottom: 10px; border: 1px solid #e5e7eb; position: relative; }
+        .array-item h4 { margin-bottom: 10px; color: #0f172a; display: flex; align-items: center; justify-content: space-between; }
+        .btn { background: #dc2626; color: #fff; padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 8px; }
+        .btn:hover { background: #b91c1c; }
         .btn-secondary { background: #6b7280; }
         .btn-secondary:hover { background: #4b5563; }
         .btn-success { background: #10b981; }
@@ -31,37 +33,175 @@
         .btn-danger { background: #ef4444; }
         .btn-danger:hover { background: #dc2626; }
         .btn-sm { padding: 5px 10px; font-size: 14px; }
+        .btn-outline { background: transparent; border: 1px solid #dc2626; color: #dc2626; }
+        .btn-outline:hover { background: #dc2626; color: white; }
         .hidden { display: none; }
         .status { padding: 10px; border-radius: 6px; margin-bottom: 20px; }
         .status.success { background: #d1fae5; color: #065f46; border: 1px solid #a7f3d0; }
         .status.error { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        
+        /* Style Controls */
+        .style-controls { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .style-control { background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
+        .style-control label { font-size: 14px; }
+        
+        /* Image Upload */
+        .image-upload { border: 2px dashed #d1d5db; padding: 20px; text-align: center; border-radius: 8px; margin-bottom: 20px; }
+        .image-upload p { margin-bottom: 15px; color: #6b7280; }
+        .image-preview { max-width: 100%; margin-top: 15px; border-radius: 8px; display: none; }
+        
+        /* Two-column layout */
+        .admin-container { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; }
+        @media (max-width: 992px) {
+            .admin-container { grid-template-columns: 1fr; }
+        }
+        
+        /* Preview panel */
+        .preview-panel { background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; height: fit-content; max-height: 80vh; overflow-y: auto; }
+        .preview-panel h3 { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #e2e8f0; }
+        
+        /* Color picker */
+        .color-picker { display: flex; gap: 10px; align-items: center; }
+        .color-picker input[type="color"] { width: 60px; height: 40px; padding: 0; border: 1px solid #d1d5db; }
+        .color-picker input[type="text"] { flex: 1; }
+        
+        /* Font selector */
+        .font-selector { display: flex; gap: 10px; }
+        .font-selector select { flex: 1; }
+        .font-selector input { width: 80px; }
+        
+        /* Section-specific controls */
+        .section-controls { margin-top: 20px; border-top: 1px solid #e5e7eb; padding-top: 20px; }
+        .section-title { font-size: 18px; margin-bottom: 15px; color: #374151; display: flex; align-items: center; gap: 8px; }
+        
+        /* Array controls */
+        .array-controls { display: flex; gap: 10px; margin-top: 15px; }
+        .array-items { margin-top: 15px; }
+        .array-item-controls { position: absolute; top: 10px; right: 10px; display: flex; gap: 5px; }
+        
+        /* Form builder */
+        .form-builder { border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .form-field { background: #f8fafc; padding: 15px; border-radius: 6px; margin-bottom: 10px; border-left: 3px solid #dc2626; }
+        .form-field-controls { display: flex; gap: 10px; margin-top: 10px; }
+        
+        /* Card builder */
+        .card-builder { border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .card-preview { background: #f8fafc; padding: 20px; border-radius: 8px; margin-top: 15px; border: 1px solid #e5e7eb; }
+        
+        /* Toggle switch */
+        .toggle-switch { position: relative; display: inline-block; width: 50px; height: 24px; }
+        .toggle-switch input { opacity: 0; width: 0; height: 0; }
+        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 24px; }
+        .toggle-slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%; }
+        input:checked + .toggle-slider { background-color: #dc2626; }
+        input:checked + .toggle-slider:before { transform: translateX(26px); }
+        .toggle-label { display: flex; align-items: center; gap: 10px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Content Management - Breakout Marketing</h1>
+        <h1><i class="fas fa-paint-brush"></i> Advanced Admin Panel - Breakout Marketing</h1>
         
         <div class="tabs">
-            <div class="tab active" data-page="home">Home</div>
-            <div class="tab" data-page="about">About</div>
-            <div class="tab" data-page="services">Services</div>
-            <div class="tab" data-page="portfolio">Portfolio</div>
-            <div class="tab" data-page="contact">Contact</div>
+            <div class="tab active" data-page="home"><i class="fas fa-home"></i> Home Page</div>
+            <div class="tab" data-page="about"><i class="fas fa-info-circle"></i> About Page</div>
+            <div class="tab" data-page="services"><i class="fas fa-concierge-bell"></i> Services Page</div>
+            <div class="tab" data-page="portfolio"><i class="fas fa-briefcase"></i> Portfolio Page</div>
+            <div class="tab" data-page="contact"><i class="fas fa-envelope"></i> Contact Page</div>
+            <div class="tab" data-page="forms"><i class="fas fa-wpforms"></i> Forms & Cards</div>
+            <div class="tab" data-page="styles"><i class="fas fa-palette"></i> Global Styles</div>
         </div>
 
         <div id="status"></div>
 
-        <div class="content">
-            <form id="contentForm">
-                <div id="formContent"></div>
-                <button type="submit" class="btn">Save Changes</button>
-            </form>
+        <div class="admin-container">
+            <div class="content">
+                <form id="contentForm">
+                    <div id="formContent"></div>
+                    <button type="submit" class="btn"><i class="fas fa-save"></i> Save Changes</button>
+                </form>
+            </div>
+            
+            <div class="preview-panel">
+                <h3><i class="fas fa-eye"></i> Live Preview</h3>
+                <div id="previewContent">
+                    <p>Changes will be previewed here as you make them.</p>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         let currentPage = 'home';
         let currentData = {};
+        let styleData = {
+            fontFamily: 'Inter, sans-serif',
+            primaryColor: '#dc2626',
+            secondaryColor: '#0ea5e9',
+            textColor: '#0f172a',
+            backgroundColor: '#f0f9ff',
+            headingFont: 'Playfair Display, serif'
+        };
+
+        // Initialize data structures for forms and cards
+        let formsData = {
+            contactForm: {
+                enabled: true,
+                fields: [
+                    { type: 'text', label: 'Full Name', required: true, name: 'name', placeholder: 'Enter your full name' },
+                    { type: 'email', label: 'Email Address', required: true, name: 'email', placeholder: 'Enter your email' },
+                    { type: 'tel', label: 'Phone Number', required: false, name: 'phone', placeholder: 'Enter your phone number' },
+                    { type: 'select', label: 'Service of Interest', required: false, name: 'service', options: ['Real Estate Investments', 'Financial Services', 'Business Setup', 'General Inquiry'] },
+                    { type: 'textarea', label: 'Message', required: true, name: 'message', placeholder: 'Tell us about your investment goals...' }
+                ],
+                submitText: 'Schedule a Free Consultation Today',
+                successMessage: 'Thank you! Your message has been sent successfully.'
+            }
+        };
+
+        let cardsData = {
+            services: [
+                { 
+                    title: 'Real Estate Investments', 
+                    subtitle: 'Unlock Dubai\'s Property Potential',
+                    description: 'Invest in high-demand real estate projects backed by top developers in the UAE.',
+                    icon: '🏠',
+                    link: 'services.html#real-estate',
+                    image: 'images/real-estate.jpeg',
+                    enabled: true
+                },
+                { 
+                    title: 'Financial Services', 
+                    subtitle: 'Smart Money, Smarter Growth',
+                    description: 'From commodities to personalized financial planning with secure, profitable solutions.',
+                    icon: '💰',
+                    link: 'services.html#financial',
+                    image: 'images/financial.jpeg',
+                    enabled: true
+                },
+                { 
+                    title: 'Business Setup', 
+                    subtitle: 'Your Gateway to Global Business',
+                    description: 'Simplify company formation, licensing, and compliance in Dubai.',
+                    icon: '🏢',
+                    link: 'services.html#setup',
+                    image: 'images/business-setup.jpeg',
+                    enabled: true
+                }
+            ],
+            testimonials: [
+                {
+                    quote: "Breakout Marketing made investing in Dubai simple and stress-free. I never imagined such high returns with such ease.",
+                    author: "Client from Bangalore",
+                    enabled: true
+                },
+                {
+                    quote: "The business setup process was smooth and professional. I could focus on my business while they handled everything.",
+                    author: "Client from Dubai",
+                    enabled: true
+                }
+            ]
+        };
 
         // Tab switching
         document.querySelectorAll('.tab').forEach(tab => {
@@ -69,7 +209,13 @@
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                 tab.classList.add('active');
                 currentPage = tab.dataset.page;
-                loadPage(currentPage);
+                if (currentPage === 'styles') {
+                    loadStyles();
+                } else if (currentPage === 'forms') {
+                    loadFormsCards();
+                } else {
+                    loadPage(currentPage);
+                }
             });
         });
 
@@ -80,9 +226,67 @@
                 if (!response.ok) throw new Error('Failed to load');
                 currentData = await response.json();
                 renderForm();
+                updatePreview();
             } catch (error) {
                 showStatus('Error loading content: ' + error.message, 'error');
+                // Initialize with empty data
+                currentData = getDefaultPageData(page);
+                renderForm();
             }
+        }
+
+        // Get default data for pages
+        function getDefaultPageData(page) {
+            const defaults = {
+                home: {
+                    heroTitle: 'Discover Smart Investment & Better Living',
+                    heroSubtitle: 'Discover luxury villas and apartments in Dubai with Breakout Marketing. Make smart investments with our expert guidance.',
+                    cta: 'View All Projects',
+                    servicesTitle: 'Our Services',
+                    servicesSubtitle: 'Premium solutions for your investment needs'
+                },
+                about: {
+                    headline: 'About Breakout Marketing',
+                    intro: 'At Breakout Marketing, we are more than just consultants—we are partners in your growth. In collaboration with Ziar Properties Dubai, we specialize in connecting investors from India and the UAE to the region\'s most trusted real estate developers, lucrative financial opportunities, and simplified business setup solutions.',
+                    mission: 'Our mission is simple: to provide transparent, reliable, and profitable pathways for individuals and businesses to thrive in Dubai and beyond.'
+                },
+                services: {
+                    headline: 'Our Premium Services',
+                    subtitle: 'Comprehensive solutions for your investment and business needs in Dubai'
+                },
+                portfolio: {
+                    headline: 'Our Success Stories',
+                    subtitle: 'Real results from our investment and business setup services'
+                },
+                contact: {
+                    headline: 'Ready to Build Your Future? Let\'s Talk.',
+                    subtitle: 'Get in touch with our experts for personalized investment and business solutions',
+                    phone: '📞 Phone: [Insert Number]',
+                    email: '📧 Email: [Insert Email]'
+                }
+            };
+            return defaults[page] || {};
+        }
+
+        // Load style settings
+        async function loadStyles() {
+            try {
+                const response = await fetch('/api/content/styles');
+                if (response.ok) {
+                    styleData = await response.json();
+                }
+                renderStyleForm();
+                updatePreview();
+            } catch (error) {
+                console.log('No saved styles found, using defaults');
+                renderStyleForm();
+            }
+        }
+
+        // Load forms and cards management
+        function loadFormsCards() {
+            renderFormsCardsForm();
+            updatePreview();
         }
 
         // Render form based on current page
@@ -92,187 +296,632 @@
 
             if (currentPage === 'home') {
                 container.innerHTML = `
+                    <h3><i class="fas fa-home"></i> Home Page Content</h3>
                     <div class="form-group">
                         <label>Hero Title</label>
-                        <input type="text" name="heroTitle" value="${currentData.heroTitle || ''}">
+                        <input type="text" name="heroTitle" value="${currentData.heroTitle || 'Discover Smart Investment & Better Living'}" oninput="updatePreview()">
                     </div>
                     <div class="form-group">
                         <label>Hero Subtitle</label>
-                        <textarea name="heroSubtitle">${currentData.heroSubtitle || ''}</textarea>
+                        <textarea name="heroSubtitle" oninput="updatePreview()">${currentData.heroSubtitle || 'Discover luxury villas and apartments in Dubai with Breakout Marketing. Make smart investments with our expert guidance.'}</textarea>
                     </div>
                     <div class="form-group">
-                        <label>Call to Action</label>
-                        <input type="text" name="cta" value="${currentData.cta || ''}">
+                        <label>Call to Action Text</label>
+                        <input type="text" name="cta" value="${currentData.cta || 'View All Projects'}" oninput="updatePreview()">
                     </div>
-                    <div class="form-group">
-                        <label>Services</label>
-                        <div id="servicesList"></div>
-                        <button type="button" class="btn btn-secondary btn-sm" onclick="addService()">Add Service</button>
+                    
+                    <div class="section-controls">
+                        <div class="section-title"><i class="fas fa-cogs"></i> Page Sections</div>
+                        <div class="toggle-label">
+                            <span>Show Services Section</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" ${currentData.showServices !== false ? 'checked' : ''} onchange="toggleSection('showServices', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-label">
+                            <span>Show Testimonials Section</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" ${currentData.showTestimonials !== false ? 'checked' : ''} onchange="toggleSection('showTestimonials', this.checked)">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="section-controls">
+                        <div class="section-title"><i class="fas fa-image"></i> Hero Background Images</div>
+                        <div class="form-group">
+                            <label>Hero Background Image 1</label>
+                            <div class="image-upload">
+                                <p>Upload hero background image</p>
+                                <input type="file" id="heroBg1" accept="image/*" onchange="previewImage(this, 'heroBg1Preview')">
+                                <img id="heroBg1Preview" class="image-preview" src="${currentData.heroBg1 || ''}" alt="Hero background preview">
+                                <input type="hidden" name="heroBg1" value="${currentData.heroBg1 || ''}">
+                            </div>
+                        </div>
                     </div>
                 `;
-                renderServices();
             } else if (currentPage === 'about') {
                 container.innerHTML = `
+                    <h3><i class="fas fa-info-circle"></i> About Page Content</h3>
                     <div class="form-group">
                         <label>Headline</label>
-                        <input type="text" name="headline" value="${currentData.headline || ''}">
+                        <input type="text" name="headline" value="${currentData.headline || 'About Breakout Marketing'}" oninput="updatePreview()">
                     </div>
                     <div class="form-group">
-                        <label>Introduction</label>
-                        <textarea name="intro">${currentData.intro || ''}</textarea>
+                        <label>Introduction Text</label>
+                        <textarea name="intro" oninput="updatePreview()">${currentData.intro || 'At Breakout Marketing, we are more than just consultants—we are partners in your growth. In collaboration with Ziar Properties Dubai, we specialize in connecting investors from India and the UAE to the region\'s most trusted real estate developers, lucrative financial opportunities, and simplified business setup solutions.'}</textarea>
                     </div>
                     <div class="form-group">
-                        <label>Mission</label>
-                        <textarea name="mission">${currentData.mission || ''}</textarea>
+                        <label>Mission Statement</label>
+                        <textarea name="mission" oninput="updatePreview()">${currentData.mission || 'Our mission is simple: to provide transparent, reliable, and profitable pathways for individuals and businesses to thrive in Dubai and beyond.'}</textarea>
+                    </div>
+                    
+                    <div class="section-controls">
+                        <div class="section-title"><i class="fas fa-image"></i> About Page Image</div>
+                        <div class="form-group">
+                            <label>About Section Image</label>
+                            <div class="image-upload">
+                                <p>Upload about section image</p>
+                                <input type="file" id="aboutImage" accept="image/*" onchange="previewImage(this, 'aboutImagePreview')">
+                                <img id="aboutImagePreview" class="image-preview" src="${currentData.aboutImage || ''}" alt="About image preview">
+                                <input type="hidden" name="aboutImage" value="${currentData.aboutImage || ''}">
+                            </div>
+                        </div>
                     </div>
                 `;
             } else if (currentPage === 'services') {
                 container.innerHTML = `
+                    <h3><i class="fas fa-concierge-bell"></i> Services Page Content</h3>
                     <div class="form-group">
-                        <label>Headline</label>
-                        <input type="text" name="headline" value="${currentData.headline || ''}">
+                        <label>Page Headline</label>
+                        <input type="text" name="headline" value="${currentData.headline || 'Our Premium Services'}" oninput="updatePreview()">
                     </div>
                     <div class="form-group">
-                        <label>Services</label>
-                        <div id="servicesList"></div>
-                        <button type="button" class="btn btn-secondary btn-sm" onclick="addService()">Add Service</button>
+                        <label>Page Subtitle</label>
+                        <textarea name="subtitle" oninput="updatePreview()">${currentData.subtitle || 'Comprehensive solutions for your investment and business needs in Dubai'}</textarea>
                     </div>
                 `;
-                renderServices();
             } else if (currentPage === 'portfolio') {
                 container.innerHTML = `
+                    <h3><i class="fas fa-briefcase"></i> Portfolio Page Content</h3>
                     <div class="form-group">
-                        <label>Headline</label>
-                        <input type="text" name="headline" value="${currentData.headline || ''}">
+                        <label>Page Headline</label>
+                        <input type="text" name="headline" value="${currentData.headline || 'Our Success Stories'}" oninput="updatePreview()">
                     </div>
                     <div class="form-group">
-                        <label>Portfolio Items</label>
-                        <div id="portfolioList"></div>
-                        <button type="button" class="btn btn-secondary btn-sm" onclick="addPortfolioItem()">Add Item</button>
+                        <label>Page Subtitle</label>
+                        <textarea name="subtitle" oninput="updatePreview()">${currentData.subtitle || 'Real results from our investment and business setup services'}</textarea>
                     </div>
                 `;
-                renderPortfolio();
             } else if (currentPage === 'contact') {
                 container.innerHTML = `
+                    <h3><i class="fas fa-envelope"></i> Contact Page Content</h3>
                     <div class="form-group">
                         <label>Headline</label>
-                        <input type="text" name="headline" value="${currentData.headline || ''}">
+                        <input type="text" name="headline" value="${currentData.headline || 'Ready to Build Your Future? Let\'s Talk.'}" oninput="updatePreview()">
                     </div>
                     <div class="form-group">
                         <label>Subtitle</label>
-                        <input type="text" name="subtitle" value="${currentData.subtitle || ''}">
+                        <input type="text" name="subtitle" value="${currentData.subtitle || 'Get in touch with our experts for personalized investment and business solutions'}" oninput="updatePreview()">
                     </div>
                     <div class="form-group">
-                        <label>Phone</label>
-                        <input type="text" name="phone" value="${currentData.phone || ''}">
+                        <label>Phone Number</label>
+                        <input type="text" name="phone" value="${currentData.phone || '📞 Phone: [Insert Number]'}" oninput="updatePreview()">
                     </div>
                     <div class="form-group">
-                        <label>Email</label>
-                        <input type="text" name="email" value="${currentData.email || ''}">
+                        <label>Email Address</label>
+                        <input type="text" name="email" value="${currentData.email || '📧 Email: [Insert Email]'}" oninput="updatePreview()">
                     </div>
-                    <div class="form-group">
-                        <label>Call to Action</label>
-                        <input type="text" name="cta" value="${currentData.cta || ''}">
-                    </div>
-                    <div class="form-group">
-                        <label>Privacy Note</label>
-                        <textarea name="note">${currentData.note || ''}</textarea>
+                    
+                    <div class="section-controls">
+                        <div class="section-title"><i class="fas fa-image"></i> Contact Page Image</div>
+                        <div class="form-group">
+                            <label>Office Image</label>
+                            <div class="image-upload">
+                                <p>Upload office image</p>
+                                <input type="file" id="officeImage" accept="image/*" onchange="previewImage(this, 'officeImagePreview')">
+                                <img id="officeImagePreview" class="image-preview" src="${currentData.officeImage || ''}" alt="Office image preview">
+                                <input type="hidden" name="officeImage" value="${currentData.officeImage || ''}">
+                            </div>
+                        </div>
                     </div>
                 `;
             }
         }
 
-        // Render services for home and services pages
-        function renderServices() {
-            const container = document.getElementById('servicesList');
-            const services = currentData.services || [];
-            container.innerHTML = services.map((service, index) => `
-                <div class="array-item">
-                    <h4>Service ${index + 1}</h4>
+        // Render forms and cards management interface
+        function renderFormsCardsForm() {
+            const container = document.getElementById('formContent');
+            container.innerHTML = `
+                <h3><i class="fas fa-wpforms"></i> Forms & Cards Management</h3>
+                
+                <div class="section-controls">
+                    <div class="section-title"><i class="fas fa-wpforms"></i> Contact Form</div>
+                    <div class="toggle-label">
+                        <span>Enable Contact Form</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" ${formsData.contactForm.enabled ? 'checked' : ''} onchange="toggleFormEnabled('contactForm', this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="form-builder">
+                        <h4>Form Fields</h4>
+                        <div id="formFields">
+                            ${renderFormFields()}
+                        </div>
+                        <div class="array-controls">
+                            <button type="button" class="btn btn-success btn-sm" onclick="addFormField()"><i class="fas fa-plus"></i> Add Field</button>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Submit Button Text</label>
+                            <input type="text" value="${formsData.contactForm.submitText}" oninput="updateFormProperty('submitText', this.value)">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Success Message</label>
+                            <textarea oninput="updateFormProperty('successMessage', this.value)">${formsData.contactForm.successMessage}</textarea>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-controls">
+                    <div class="section-title"><i class="fas fa-id-card"></i> Service Cards</div>
+                    <div id="serviceCards">
+                        ${renderServiceCards()}
+                    </div>
+                    <div class="array-controls">
+                        <button type="button" class="btn btn-success btn-sm" onclick="addServiceCard()"><i class="fas fa-plus"></i> Add Service Card</button>
+                    </div>
+                </div>
+                
+                <div class="section-controls">
+                    <div class="section-title"><i class="fas fa-comment"></i> Testimonial Cards</div>
+                    <div id="testimonialCards">
+                        ${renderTestimonialCards()}
+                    </div>
+                    <div class="array-controls">
+                        <button type="button" class="btn btn-success btn-sm" onclick="addTestimonialCard()"><i class="fas fa-plus"></i> Add Testimonial</button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render form fields
+        function renderFormFields() {
+            return formsData.contactForm.fields.map((field, index) => `
+                <div class="form-field">
                     <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" name="services[${index}].title" value="${service.title || ''}">
+                        <label>Field Label</label>
+                        <input type="text" value="${field.label}" oninput="updateFormField(${index}, 'label', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Field Type</label>
+                        <select onchange="updateFormField(${index}, 'type', this.value)">
+                            <option value="text" ${field.type === 'text' ? 'selected' : ''}>Text</option>
+                            <option value="email" ${field.type === 'email' ? 'selected' : ''}>Email</option>
+                            <option value="tel" ${field.type === 'tel' ? 'selected' : ''}>Phone</option>
+                            <option value="textarea" ${field.type === 'textarea' ? 'selected' : ''}>Textarea</option>
+                            <option value="select" ${field.type === 'select' ? 'selected' : ''}>Select</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Field Name</label>
+                        <input type="text" value="${field.name}" oninput="updateFormField(${index}, 'name', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Placeholder</label>
+                        <input type="text" value="${field.placeholder}" oninput="updateFormField(${index}, 'placeholder', this.value)">
+                    </div>
+                    <div class="toggle-label">
+                        <span>Required Field</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" ${field.required ? 'checked' : ''} onchange="updateFormField(${index}, 'required', this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    ${field.type === 'select' ? `
+                        <div class="form-group">
+                            <label>Options (comma separated)</label>
+                            <input type="text" value="${field.options.join(', ')}" oninput="updateFormField(${index}, 'options', this.value.split(',').map(opt => opt.trim()))">
+                        </div>
+                    ` : ''}
+                    <div class="form-field-controls">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="removeFormField(${index})"><i class="fas fa-trash"></i> Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render service cards
+        function renderServiceCards() {
+            return cardsData.services.map((card, index) => `
+                <div class="card-builder">
+                    <div class="toggle-label">
+                        <span>Enable Card</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" ${card.enabled ? 'checked' : ''} onchange="toggleCardEnabled('services', ${index}, this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>Card Title</label>
+                        <input type="text" value="${card.title}" oninput="updateCard('services', ${index}, 'title', this.value)">
                     </div>
                     <div class="form-group">
                         <label>Subtitle</label>
-                        <input type="text" name="services[${index}].subtitle" value="${service.subtitle || ''}">
+                        <input type="text" value="${card.subtitle}" oninput="updateCard('services', ${index}, 'subtitle', this.value)">
                     </div>
                     <div class="form-group">
                         <label>Description</label>
-                        <textarea name="services[${index}].desc">${service.desc || ''}</textarea>
+                        <textarea oninput="updateCard('services', ${index}, 'description', this.value)">${card.description}</textarea>
                     </div>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="removeService(${index})">Remove</button>
+                    <div class="form-group">
+                        <label>Icon</label>
+                        <input type="text" value="${card.icon}" oninput="updateCard('services', ${index}, 'icon', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Link URL</label>
+                        <input type="text" value="${card.link}" oninput="updateCard('services', ${index}, 'link', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <label>Image URL</label>
+                        <input type="text" value="${card.image}" oninput="updateCard('services', ${index}, 'image', this.value)">
+                    </div>
+                    <div class="array-controls">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="removeCard('services', ${index})"><i class="fas fa-trash"></i> Remove Card</button>
+                    </div>
                 </div>
             `).join('');
         }
 
-        // Render portfolio items
-        function renderPortfolio() {
-            const container = document.getElementById('portfolioList');
-            const items = currentData.items || [];
-            container.innerHTML = items.map((item, index) => `
-                <div class="array-item">
-                    <h4>Item ${index + 1}</h4>
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" name="items[${index}].title" value="${item.title || ''}">
+        // Render testimonial cards
+        function renderTestimonialCards() {
+            return cardsData.testimonials.map((card, index) => `
+                <div class="card-builder">
+                    <div class="toggle-label">
+                        <span>Enable Testimonial</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" ${card.enabled ? 'checked' : ''} onchange="toggleCardEnabled('testimonials', ${index}, this.checked)">
+                            <span class="toggle-slider"></span>
+                        </label>
                     </div>
                     <div class="form-group">
-                        <label>Description</label>
-                        <textarea name="items[${index}].desc">${item.desc || ''}</textarea>
+                        <label>Testimonial Quote</label>
+                        <textarea oninput="updateCard('testimonials', ${index}, 'quote', this.value)">${card.quote}</textarea>
                     </div>
-                    <button type="button" class="btn btn-danger btn-sm" onclick="removePortfolioItem(${index})">Remove</button>
+                    <div class="form-group">
+                        <label>Author</label>
+                        <input type="text" value="${card.author}" oninput="updateCard('testimonials', ${index}, 'author', this.value)">
+                    </div>
+                    <div class="array-controls">
+                        <button type="button" class="btn btn-danger btn-sm" onclick="removeCard('testimonials', ${index})"><i class="fas fa-trash"></i> Remove Testimonial</button>
+                    </div>
                 </div>
             `).join('');
         }
 
-        // Add/remove functions
-        function addService() {
-            if (!currentData.services) currentData.services = [];
-            currentData.services.push({ title: '', subtitle: '', desc: '' });
-            renderServices();
+        // Form and Card Management Functions
+        function toggleFormEnabled(formName, enabled) {
+            formsData[formName].enabled = enabled;
+            updatePreview();
         }
 
-        function removeService(index) {
-            currentData.services.splice(index, 1);
-            renderServices();
+        function updateFormProperty(property, value) {
+            formsData.contactForm[property] = value;
+            updatePreview();
         }
 
-        function addPortfolioItem() {
-            if (!currentData.items) currentData.items = [];
-            currentData.items.push({ title: '', desc: '' });
-            renderPortfolio();
+        function addFormField() {
+            formsData.contactForm.fields.push({
+                type: 'text',
+                label: 'New Field',
+                name: 'new_field',
+                placeholder: 'Enter value',
+                required: false
+            });
+            renderFormsCardsForm();
+            updatePreview();
         }
 
-        function removePortfolioItem(index) {
-            currentData.items.splice(index, 1);
-            renderPortfolio();
+        function updateFormField(index, property, value) {
+            formsData.contactForm.fields[index][property] = value;
+            updatePreview();
+        }
+
+        function removeFormField(index) {
+            formsData.contactForm.fields.splice(index, 1);
+            renderFormsCardsForm();
+            updatePreview();
+        }
+
+        function addServiceCard() {
+            cardsData.services.push({
+                title: 'New Service',
+                subtitle: 'Service description',
+                description: 'Detailed service information',
+                icon: '⭐',
+                link: '#',
+                image: 'images/service.jpg',
+                enabled: true
+            });
+            renderFormsCardsForm();
+            updatePreview();
+        }
+
+        function addTestimonialCard() {
+            cardsData.testimonials.push({
+                quote: 'Great service! Would recommend to anyone.',
+                author: 'Satisfied Client',
+                enabled: true
+            });
+            renderFormsCardsForm();
+            updatePreview();
+        }
+
+        function updateCard(type, index, property, value) {
+            cardsData[type][index][property] = value;
+            updatePreview();
+        }
+
+        function toggleCardEnabled(type, index, enabled) {
+            cardsData[type][index].enabled = enabled;
+            updatePreview();
+        }
+
+        function removeCard(type, index) {
+            cardsData[type].splice(index, 1);
+            renderFormsCardsForm();
+            updatePreview();
+        }
+
+        function toggleSection(section, enabled) {
+            currentData[section] = enabled;
+            updatePreview();
+        }
+
+        // [Rest of the functions remain the same - updateStyle, previewImage, etc.]
+
+        // Update style data
+        function updateStyle(property, value) {
+            styleData[property] = value;
+            updatePreview();
+        }
+
+        // Image preview function
+        function previewImage(input, previewId) {
+            const preview = document.getElementById(previewId);
+            const file = input.files[0];
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    // Update the corresponding hidden input
+                    const hiddenInput = input.parentElement.querySelector('input[type="hidden"]');
+                    if (hiddenInput) {
+                        hiddenInput.value = e.target.result;
+                    }
+                    updatePreview();
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Update preview panel
+        function updatePreview() {
+            const preview = document.getElementById('previewContent');
+            
+            if (currentPage === 'styles') {
+                preview.innerHTML = `
+                    <div style="font-family: ${styleData.fontFamily}; color: ${styleData.textColor}; padding: 20px; background: ${styleData.backgroundColor}; border-radius: 8px;">
+                        <h2 style="color: ${styleData.primaryColor}; font-family: ${styleData.headingFont};">Breakout Marketing</h2>
+                        <p>This is how your text will look with the selected styles.</p>
+                        <button style="background: ${styleData.primaryColor}; color: white; padding: 10px 20px; border: none; border-radius: 5px;">Sample Button</button>
+                        <div style="margin-top: 20px; display: flex; gap: 10px;">
+                            <div style="width: 30px; height: 30px; background: ${styleData.primaryColor};"></div>
+                            <div style="width: 30px; height: 30px; background: ${styleData.secondaryColor};"></div>
+                            <div style="width: 30px; height: 30px; background: ${styleData.textColor};"></div>
+                            <div style="width: 30px; height: 30px; background: ${styleData.backgroundColor}; border: 1px solid #ccc;"></div>
+                        </div>
+                    </div>
+                `;
+                return;
+            }
+            
+            if (currentPage === 'forms') {
+                preview.innerHTML = renderFormsPreview();
+                return;
+            }
+            
+            // For content pages
+            let previewHTML = '';
+            const formData = new FormData(document.getElementById('contentForm'));
+            
+            if (currentPage === 'home') {
+                previewHTML = `
+                    <div style="background: #0ea5e9; padding: 40px; border-radius: 10px; color: white; text-align: center;">
+                        <h1 style="font-family: ${styleData.headingFont}; color: #ffffff; font-size: 72px;">${formData.get('heroTitle') || 'Discover Smart Investment & Better Living'}</h1>
+                        <p>${formData.get('heroSubtitle') || 'Discover luxury villas and apartments in Dubai with Breakout Marketing. Make smart investments with our expert guidance.'}</p>
+                        <button style="background: ${styleData.primaryColor}; color: white; padding: 12px 24px; border: none; border-radius: 5px; margin-top: 20px;">${formData.get('cta') || 'View All Projects'}</button>
+                    </div>
+                    
+                    ${currentData.showServices !== false ? `
+                    <div style="padding: 40px 20px;">
+                        <h2 style="font-family: ${styleData.headingFont}; text-align: center;">Our Services</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 30px;">
+                            ${cardsData.services.filter(card => card.enabled).map(card => `
+                                <div style="background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb;">
+                                    <div style="font-size: 40px; margin-bottom: 15px;">${card.icon}</div>
+                                    <h3 style="color: ${styleData.primaryColor};">${card.title}</h3>
+                                    <p style="font-weight: 600; color: #374151;">${card.subtitle}</p>
+                                    <p style="color: #6b7280;">${card.description}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+                    
+                    ${currentData.showTestimonials !== false ? `
+                    <div style="background: #f8fafc; padding: 40px 20px;">
+                        <h2 style="font-family: ${styleData.headingFont}; text-align: center;">What Our Clients Say</h2>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 30px;">
+                            ${cardsData.testimonials.filter(card => card.enabled).map(card => `
+                                <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid ${styleData.primaryColor};">
+                                    <p style="font-style: italic; color: #374151;">"${card.quote}"</p>
+                                    <p style="font-weight: 600; color: ${styleData.primaryColor}; margin-top: 15px;">– ${card.author}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    ` : ''}
+                `;
+            } else if (currentPage === 'about') {
+                previewHTML = `
+                    <div style="padding: 20px;">
+                        <h2 style="font-family: ${styleData.headingFont}; color: #0f172a;">${formData.get('headline') || 'About Breakout Marketing'}</h2>
+                        <p>${formData.get('intro') || 'At Breakout Marketing, we are more than just consultants—we are partners in your growth.'}</p>
+                        <p><strong>Mission:</strong> ${formData.get('mission') || 'Our mission is simple: to provide transparent, reliable, and profitable pathways for individuals and businesses to thrive in Dubai and beyond.'}</p>
+                    </div>
+                `;
+            } else if (currentPage === 'services') {
+                previewHTML = `
+                    <div style="padding: 20px;">
+                        <h2 style="font-family: ${styleData.headingFont};">${formData.get('headline') || 'Our Premium Services'}</h2>
+                        <p>${formData.get('subtitle') || 'Comprehensive solutions for your investment and business needs in Dubai'}</p>
+                    </div>
+                `;
+            } else if (currentPage === 'portfolio') {
+                previewHTML = `
+                    <div style="padding: 20px;">
+                        <h2 style="font-family: ${styleData.headingFont};">${formData.get('headline') || 'Our Success Stories'}</h2>
+                        <p>${formData.get('subtitle') || 'Real results from our investment and business setup services'}</p>
+                    </div>
+                `;
+            } else if (currentPage === 'contact') {
+                previewHTML = `
+                    <div style="padding: 20px;">
+                        <h2 style="font-family: ${styleData.headingFont};">${formData.get('headline') || 'Ready to Build Your Future? Let\'s Talk.'}</h2>
+                        <p>${formData.get('subtitle') || 'Get in touch with our experts for personalized investment and business solutions'}</p>
+                        
+                        <div style="background: #f8fafc; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                            <p><strong>Phone:</strong> ${formData.get('phone') || '📞 Phone: [Insert Number]'}</p>
+                            <p><strong>Email:</strong> ${formData.get('email') || '📧 Email: [Insert Email]'}</p>
+                        </div>
+                        
+                        ${formsData.contactForm.enabled ? `
+                        <div style="margin-top: 30px;">
+                            <h3>Contact Form</h3>
+                            <div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb;">
+                                ${formsData.contactForm.fields.map(field => `
+                                    <div style="margin-bottom: 15px;">
+                                        <label style="display: block; margin-bottom: 5px; font-weight: 500;">${field.label} ${field.required ? '*' : ''}</label>
+                                        ${field.type === 'textarea' ? 
+                                            `<textarea style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px;" placeholder="${field.placeholder}"></textarea>` :
+                                        field.type === 'select' ?
+                                            `<select style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px;">
+                                                <option value="">${field.placeholder}</option>
+                                                ${field.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                                            </select>` :
+                                            `<input type="${field.type}" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px;" placeholder="${field.placeholder}">`
+                                        }
+                                    </div>
+                                `).join('')}
+                                <button style="background: ${styleData.primaryColor}; color: white; padding: 12px 24px; border: none; border-radius: 6px; width: 100%;">${formsData.contactForm.submitText}</button>
+                            </div>
+                        </div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+            
+            preview.innerHTML = previewHTML || `<p>Preview for ${currentPage} page</p>`;
+        }
+
+        // Render forms preview
+        function renderFormsPreview() {
+            return `
+                <div style="padding: 20px;">
+                    <h3 style="font-family: ${styleData.headingFont}; color: ${styleData.primaryColor};">Forms & Cards Preview</h3>
+                    
+                    <div style="margin-top: 30px;">
+                        <h4>Contact Form Preview</h4>
+                        <div style="background: white; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb; margin-top: 15px;">
+                            ${formsData.contactForm.fields.map(field => `
+                                <div style="margin-bottom: 15px;">
+                                    <label style="display: block; margin-bottom: 5px; font-weight: 500;">${field.label} ${field.required ? '*' : ''}</label>
+                                    ${field.type === 'textarea' ? 
+                                        `<textarea style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px;" placeholder="${field.placeholder}"></textarea>` :
+                                    field.type === 'select' ?
+                                        `<select style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px;">
+                                            <option value="">${field.placeholder}</option>
+                                            ${field.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                                        </select>` :
+                                        `<input type="${field.type}" style="width: 100%; padding: 10px; border: 1px solid #d1d5db; border-radius: 6px;" placeholder="${field.placeholder}">`
+                                    }
+                                </div>
+                            `).join('')}
+                            <button style="background: ${styleData.primaryColor}; color: white; padding: 12px 24px; border: none; border-radius: 6px; width: 100%;">${formsData.contactForm.submitText}</button>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <h4>Service Cards Preview</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 15px;">
+                            ${cardsData.services.filter(card => card.enabled).map(card => `
+                                <div style="background: #f8fafc; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb; text-align: center;">
+                                    <div style="font-size: 40px; margin-bottom: 15px;">${card.icon}</div>
+                                    <h4 style="color: ${styleData.primaryColor}; margin-bottom: 10px;">${card.title}</h4>
+                                    <p style="font-weight: 600; color: #374151; margin-bottom: 10px;">${card.subtitle}</p>
+                                    <p style="color: #6b7280; font-size: 14px;">${card.description}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 30px;">
+                        <h4>Testimonial Cards Preview</h4>
+                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 15px;">
+                            ${cardsData.testimonials.filter(card => card.enabled).map(card => `
+                                <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid ${styleData.primaryColor};">
+                                    <p style="font-style: italic; color: #374151;">"${card.quote}"</p>
+                                    <p style="font-weight: 600; color: ${styleData.primaryColor}; margin-top: 15px;">– ${card.author}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
         }
 
         // Form submission
         document.getElementById('contentForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            const formData = new FormData(e.target);
-            const data = {};
+            let data = {};
             
-            for (let [key, value] of formData.entries()) {
-                if (key.includes('[')) {
-                    // Handle array fields
-                    const [parent, child] = key.split('[');
-                    const index = parseInt(child.split(']')[0]);
-                    const field = child.split(']')[1].substring(1);
-                    
-                    if (!data[parent]) data[parent] = [];
-                    if (!data[parent][index]) data[parent][index] = {};
-                    data[parent][index][field] = value;
-                } else {
+            if (currentPage === 'styles') {
+                data = styleData;
+            } else if (currentPage === 'forms') {
+                data = {
+                    forms: formsData,
+                    cards: cardsData
+                };
+            } else {
+                const formData = new FormData(e.target);
+                for (let [key, value] of formData.entries()) {
                     data[key] = value;
                 }
             }
 
             try {
-                const response = await fetch(`/api/content/${currentPage}`, {
+                const endpoint = currentPage === 'styles' ? '/api/content/styles' : 
+                                currentPage === 'forms' ? '/api/content/forms-cards' : 
+                                `/api/content/${currentPage}`;
+                const response = await fetch(endpoint, {
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data)
@@ -296,3 +945,79 @@
     </script>
 </body>
 </html>
+
+<!-- // Add this at the top of your admin.js or in a script tag in admin.html
+const API_BASE = window.location.hostname === 'localhost' ? '' : 'https://yourdomain.com';
+
+async function apiRequest(endpoint, options = {}) {
+  const response = await fetch(`${API_BASE}/.netlify/functions/${endpoint}`, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('adminToken')}`
+    },
+    ...options
+  });
+  
+  if (response.status === 401) {
+    localStorage.removeItem('adminToken');
+    window.location.reload();
+    return;
+  }
+  
+  return response.json();
+}
+
+// Update all your fetch calls to use the API
+async function loadPage(page) {
+  try {
+    const data = await apiRequest(`content?page=${page}`);
+    currentData = data;
+    renderForm();
+    updatePreview();
+  } catch (error) {
+    console.error('Error loading content:', error);
+    currentData = {};
+    renderForm();
+  }
+}
+
+async function saveContent(page, data) {
+  try {
+    const result = await apiRequest(`content?page=${page}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    });
+    
+    if (result.success) {
+      showStatus('Content saved successfully!', 'success');
+    } else {
+      throw new Error(result.error);
+    }
+  } catch (error) {
+    showStatus('Error saving content: ' + error.message, 'error');
+  }
+}
+
+// Update login function
+async function login() {
+  const username = document.getElementById('username').value;
+  const password = document.getElementById('password').value;
+  
+  try {
+    const result = await apiRequest('admin-auth', {
+      method: 'POST',
+      body: JSON.stringify({ username, password })
+    });
+    
+    if (result.success) {
+      localStorage.setItem('adminToken', result.token);
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminPanel').style.display = 'block';
+      loadPage('home');
+    } else {
+      showLoginStatus('Invalid credentials', 'error');
+    }
+  } catch (error) {
+    showLoginStatus('Login error: ' + error.message, 'error');
+  }
+} -->

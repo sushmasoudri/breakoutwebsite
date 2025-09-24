@@ -9,12 +9,181 @@
     <meta property="og:title" content="Contact · Breakout Marketing"/>
     <meta property="og:description" content="Premium advisory in Real Estate Investments, Financial Services, and Business Setup in Dubai."/>
     <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://yourdomain.com/page.html">
 
     <link rel="icon" href="/favicon.ico"/>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="/css/styles.css"/>
+    <link rel="stylesheet" href="css/styles.css"/>
+    <style>
+        /* Map Image Styles */
+        .map-container {
+            margin-top: 40px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border: 1px solid var(--line);
+            position: relative;
+        }
+        
+        .map-image {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            display: block;
+        }
+        
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(14, 165, 233, 0);
+            transition: background 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            cursor: pointer;
+        }
+        
+        .map-container:hover .map-overlay {
+            background: rgba(14, 165, 233, 0.1);
+            opacity: 1;
+        }
+        
+        .map-button {
+            background: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .map-button:hover {
+            background: var(--primary-600);
+            transform: scale(1.05);
+        }
+        
+        .map-placeholder {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .map-placeholder-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+        
+        /* Contact info enhancements */
+        .contact-info {
+            position: relative;
+        }
+        
+        .contact-section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 24px;
+        }
+        
+        .contact-section-title .icon {
+            background: var(--primary);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+        
+        .map-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .map-action-btn {
+            background: var(--surface);
+            border: 1px solid var(--line);
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .map-action-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .map-image {
+                height: 250px;
+            }
+            
+            .map-placeholder {
+                height: 250px;
+            }
+            
+            .map-placeholder-icon {
+                font-size: 48px;
+            }
+            
+            .map-actions {
+                flex-direction: column;
+            }
+            
+            .map-action-btn {
+                justify-content: center;
+            }
+            
+            .contact-section-title {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .map-image {
+                height: 200px;
+            }
+            
+            .map-placeholder {
+                height: 200px;
+            }
+            
+            .map-button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -44,19 +213,60 @@
         </section>
 
         <section class="section container reveal">
-            <div class="grid grid--2 contact-grid">
+            <div class="grid grid--2 grid--tablet-1 contact-grid">
 
                 <!-- Contact Info -->
                 <div class="contact-info">
-                    <h2 class="section__title">Get In Touch</h2>
+                    <div class="contact-section-title">
+                        <div class="icon">📍</div>
+                        <h2 class="section__title">Our Location</h2>
+                    </div>
 
-                  <div class="contact-item">
+                    <!-- Map Image Container -->
+                    <div class="map-container">
+                        <img 
+                            class="map-image"
+                            src="images/Map.jpeg" 
+                            alt="Breakout Marketing Office Location - Business Bay, Dubai"
+                            onerror="this.style.display='none'; document.getElementById('mapPlaceholder').style.display='flex';"
+                        />
+                        
+                        <!-- Fallback placeholder if image doesn't load -->
+                        <div class="map-placeholder" id="mapPlaceholder" style="display: none;">
+                            <div class="map-placeholder-icon">📍</div>
+                            <h3>Our Location</h3>
+                            <p>Business Bay, Dubai, UAE</p>
+                            <button class="map-action-btn" onclick="openGoogleMaps()">
+                                <span>🗺️</span> View on Google Maps
+                            </button>
+                        </div>
+                        
+                        <!-- Click overlay to open full map -->
+                        <div class="map-overlay" onclick="openGoogleMaps()">
+                            <div class="map-button">
+                                <span>🗺️</span> Open Interactive Map
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Map Actions -->
+                    <div class="map-actions">
+                        <button class="map-action-btn" onclick="openGoogleMaps()">
+                            <span>🗺️</span> Open in Google Maps
+                        </button>
+                        <button class="map-action-btn" onclick="shareLocation()">
+                            <span>📤</span> Share Location
+                        </button>
+                    </div>
+
+                    <div class="contact-item">
                         <a href="https://maps.app.goo.gl/ocETM5pZ2U2V7VFc9" target="_blank" class="contact-item__icon-link">
                             <div class="contact-item__icon">📍</div>
                         </a>
                         <div class="contact-item__content">
                             <h3>Our Offices</h3>
                             <p id="subtitle">Offices in India & Dubai</p>
+                            <p><small>Business Bay, Dubai, UAE</small></p>
                         </div>
                     </div>
 
@@ -91,16 +301,23 @@
                 <!-- Contact Form -->
                 <div class="contact-form-container">
                     <div class="contact-form-wrapper">
-                        <h2 class="section__title">Send Us a Message</h2>
-                        <form class="form contact-form" id="lead-form" method="POST" action="https://formspree.io/f/xbldjylr">
-                            <div class="form__row">
+                        <div class="contact-section-title">
+                            <div class="icon">📧</div>
+                            <h2 class="section__title">Send Us a Message</h2>
+                        </div>
+                        <form class="form contact-form" id="lead-form" action="https://formspree.io/f/xkgqwkee" method="POST">
+                            <input type="hidden" name="_subject" value="New Contact Form Submission - Breakout Marketing">
+                            <input type="hidden" name="_replyto" value="" id="replyTo">
+                            <input type="text" name="_gotcha" style="display:none">
+                            
+                            <div class="form__row form__row--responsive">
                                 <label>
                                     Full Name
                                     <input required name="name" type="text" placeholder="Enter your full name"/>
                                 </label>
                                 <label>
                                     Email Address
-                                    <input required name="email" type="email" placeholder="Enter your email"/>
+                                    <input required name="email" type="email" placeholder="Enter your email" id="emailInput"/>
                                 </label>
                             </div>
 
@@ -143,6 +360,8 @@
                             <p class="form__note" id="privacyNote">
                                 We respect your privacy. Your data is kept confidential and will only be used to contact you about your inquiry.
                             </p>
+                            
+                            <div id="formMessage" style="display: none; margin-top: 15px; padding: 10px; border-radius: 5px;"></div>
                         </form>
                     </div>
                 </div>
@@ -152,19 +371,16 @@
 
         <section class="section section--alt container reveal">
             <h2 class="section__title">Why Choose Breakout Marketing?</h2>
-            <div class="grid grid--3">
-                <div class="card">
-                    <!-- <div class="card__icon">🎯</div> -->
+            <div class="grid grid--3 grid--tablet-2 grid--mobile-1">
+                <div class="card card--responsive">
                     <h3>Expert Guidance</h3>
                     <p>Years of experience in Dubai's real estate and business landscape</p>
                 </div>
-                <div class="card">
-                    <!-- <div class="card__icon">🔒</div> -->
+                <div class="card card--responsive">
                     <h3>Secure & Compliant</h3>
                     <p>All transactions follow UAE regulations and best practices</p>
                 </div>
-                <div class="card">
-                    <!-- <div class="card__icon">📈</div> -->
+                <div class="card card--responsive">
                     <h3>Proven Results</h3>
                     <p>Track record of successful investments and business setups</p>
                 </div>
@@ -183,6 +399,70 @@
 
     <script src="/js/main.js" defer></script>
     <script>
+        // Map Functions
+        function openGoogleMaps() {
+            window.open('https://maps.app.goo.gl/ocETM5pZ2U2V7VFc9', '_blank');
+        }
+        
+        function shareLocation() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Breakout Marketing Office',
+                    text: 'Visit Breakout Marketing office in Dubai - Business Bay',
+                    url: 'https://maps.app.goo.gl/ocETM5pZ2U2V7VFc9'
+                })
+                .catch(error => console.log('Error sharing:', error));
+            } else {
+                // Fallback for browsers that don't support Web Share API
+                navigator.clipboard.writeText('Breakout Marketing Office: https://maps.app.goo.gl/ocETM5pZ2U2V7VFc9')
+                    .then(() => {
+                        alert('Location link copied to clipboard!');
+                    })
+                    .catch(err => {
+                        console.error('Failed to copy: ', err);
+                        openGoogleMaps();
+                    });
+            }
+        }
+        
+        // Check if map image loaded successfully
+        window.addEventListener('load', function() {
+            const mapImage = document.querySelector('.map-image');
+            const mapPlaceholder = document.getElementById('mapPlaceholder');
+            
+            // If image fails to load, show placeholder
+            if (mapImage && mapImage.complete && mapImage.naturalHeight === 0) {
+                mapImage.style.display = 'none';
+                mapPlaceholder.style.display = 'flex';
+            }
+        });
+        
+        // Formspree form handling
+        document.getElementById('lead-form').addEventListener('submit', function(e) {
+            const form = e.target;
+            const submitBtn = document.getElementById('submitBtn');
+            const formMessage = document.getElementById('formMessage');
+            const emailInput = document.getElementById('emailInput');
+            
+            // Set reply-to email
+            document.getElementById('replyTo').value = emailInput.value;
+            
+            // Show loading state
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+            formMessage.style.display = 'none';
+            
+            // Formspree will handle the submission and redirect
+            // We'll just show a temporary message
+            setTimeout(() => {
+                formMessage.textContent = 'Thank you! Your message is being sent...';
+                formMessage.style.background = '#d1fae5';
+                formMessage.style.color = '#065f46';
+                formMessage.style.display = 'block';
+            }, 500);
+        });
+
         async function loadContactContent() {
             try {
                 const res = await fetch('/api/content/contact', { cache: 'force-cache' });

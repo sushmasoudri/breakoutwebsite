@@ -9,6 +9,7 @@
     <meta property="og:title" content="About · Breakout Marketing"/>
     <meta property="og:description" content="Premium advisory in Real Estate Investments, Financial Services, and Business Setup in Dubai."/>
     <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://yourdomain.com/page.html">
     
     <link rel="icon" href="/favicon.ico"/>
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
@@ -37,7 +38,7 @@
             <div class="hero__overlay"></div>
             <div class="hero__content container reveal">
                 <h1 id="headline">About Breakout Marketing</h1>
-                <p id="intro">
+                <p id="intro" class="hero__subtitle">
                     At Breakout Marketing, we are more than just consultants—we are partners in your growth. 
                     In collaboration with Ziar Properties Dubai, we specialize in connecting investors from India and the UAE 
                     to the region's most trusted real estate developers, lucrative financial opportunities, and simplified business setup solutions.
@@ -51,33 +52,15 @@
                 Our mission is simple: to provide transparent, reliable, and profitable pathways for individuals and businesses to thrive in Dubai and beyond.
             </p>
 
-            <div class="grid grid--3" id="pillarsGrid">
-                <div class="card">
-                    <!-- <div class="card__icon">🎯</div> -->
-                    <h3>Our Philosophy</h3>
-                    <p>Fiduciary mindset, data-driven decisions, and long-term partnerships that prioritize your success above all else.</p>
-                </div>
-                <div class="card">
-                    <!-- <div class="card__icon">⚡</div> -->
-                    <h3>Our Edge</h3>
-                    <p>Deep local network, cross-border expertise, and execution excellence that delivers results consistently.</p>
-                </div>
-                <div class="card">
-                    <!-- <div class="card__icon">🤝</div> -->
-                    <h3>Our Promise</h3>
-                    <p>Transparent communication, secure transactions, and unwavering commitment to your investment goals.</p>
-                </div>
+            <div class="grid grid--3 grid--tablet-2 grid--mobile-1" id="pillarsGrid">
+                <!-- Pillars will be loaded dynamically -->
             </div>
         </section>
 
         <section class="section section--alt container reveal">
             <h2 class="section__title">Why Choose Breakout Marketing?</h2>
-            <ul id="whyPoints" class="why-list">
-                <li>Trusted partnerships with top UAE developers</li>
-                <li>Tailored solutions for Indian & UAE investors</li>
-                <li>End-to-end support: Investment, setup, and finance</li>
-                <li>Transparent, secure, and profitable services</li>
-                <li>A team committed to your growth and success</li>
+            <ul id="whyPoints" class="why-list why-list--responsive">
+                <!-- Why points will be loaded dynamically -->
             </ul>
         </section>
     </main>
@@ -93,33 +76,97 @@
     <script>
         async function loadAboutContent() {
             try {
-                const res = await fetch('/api/content/about', { cache: 'force-cache' });
+                const res = await fetch('/api/content/about');
                 const data = await res.json();
 
-                document.getElementById('headline').textContent = data.headline || 'About Us';
+                // Update headline and intro
+                document.getElementById('headline').textContent = data.headline || 'About Breakout Marketing';
                 document.getElementById('intro').textContent = data.intro || 
                     'At Breakout Marketing, we are more than just consultants—we are partners in your growth. In collaboration with Ziar Properties Dubai, we specialize in connecting investors from India and the UAE to the region\'s most trusted real estate developers, lucrative financial opportunities, and simplified business setup solutions.';
 
-                if(data.mission){
-                    document.getElementById('mission').style.display = 'block';
+                // Update mission
+                if (data.mission) {
                     document.getElementById('mission').textContent = data.mission;
                 }
 
+                // Update pillars
                 const pillarsGrid = document.getElementById('pillarsGrid');
-                if(data.pillars && data.pillars.length){
-                    pillarsGrid.innerHTML = data.pillars.map(p => `
-                        <div class="card">
-                            <h3>${p.title}</h3>
-                            <p>${p.desc}</p>
-                        </div>`).join('');
+                if (data.pillars && data.pillars.length) {
+                    pillarsGrid.innerHTML = data.pillars.map(pillar => `
+                        <div class="card card--responsive">
+                            <h3>${pillar.title}</h3>
+                            <p>${pillar.desc}</p>
+                        </div>
+                    `).join('');
+                } else {
+                    // Default pillars
+                    pillarsGrid.innerHTML = `
+                        <div class="card card--responsive">
+                            <h3>Our Philosophy</h3>
+                            <p>Fiduciary mindset, data-driven decisions, and long-term partnerships that prioritize your success above all else.</p>
+                        </div>
+                        <div class="card card--responsive">
+                            <h3>Our Edge</h3>
+                            <p>Deep local network, cross-border expertise, and execution excellence that delivers results consistently.</p>
+                        </div>
+                        <div class="card card--responsive">
+                            <h3>Our Promise</h3>
+                            <p>Transparent communication, secure transactions, and unwavering commitment to your investment goals.</p>
+                        </div>
+                    `;
                 }
-            } catch(e) {
+
+                // Update why points
+                const whyPointsList = document.getElementById('whyPoints');
+                if (data.whyPoints && data.whyPoints.length) {
+                    whyPointsList.innerHTML = data.whyPoints.map(point => `
+                        <li>${point}</li>
+                    `).join('');
+                } else {
+                    // Default why points
+                    whyPointsList.innerHTML = `
+                        <li>Trusted partnerships with top UAE developers</li>
+                        <li>Tailored solutions for Indian & UAE investors</li>
+                        <li>End-to-end support: Investment, setup, and finance</li>
+                        <li>Transparent, secure, and profitable services</li>
+                        <li>A team committed to your growth and success</li>
+                    `;
+                }
+
+            } catch (e) {
                 console.error('Failed to load about content:', e);
+                loadDefaultAboutContent();
             }
         }
 
-        setTimeout(loadAboutContent, 100);
+        function loadDefaultAboutContent() {
+            // Default pillars
+            document.getElementById('pillarsGrid').innerHTML = `
+                <div class="card card--responsive">
+                    <h3>Our Philosophy</h3>
+                    <p>Fiduciary mindset, data-driven decisions, and long-term partnerships that prioritize your success above all else.</p>
+                </div>
+                <div class="card card--responsive">
+                    <h3>Our Edge</h3>
+                    <p>Deep local network, cross-border expertise, and execution excellence that delivers results consistently.</p>
+                </div>
+                <div class="card card--responsive">
+                    <h3>Our Promise</h3>
+                    <p>Transparent communication, secure transactions, and unwavering commitment to your investment goals.</p>
+                </div>
+            `;
+
+            // Default why points
+            document.getElementById('whyPoints').innerHTML = `
+                <li>Trusted partnerships with top UAE developers</li>
+                <li>Tailored solutions for Indian & UAE investors</li>
+                <li>End-to-end support: Investment, setup, and finance</li>
+                <li>Transparent, secure, and profitable services</li>
+                <li>A team committed to your growth and success</li>
+            `;
+        }
+
+        document.addEventListener('DOMContentLoaded', loadAboutContent);
     </script>
 </body>
 </html>
-
